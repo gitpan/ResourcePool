@@ -18,6 +18,8 @@ lib/ResourcePool/LoadBalancer.pm
 lib/ResourcePool/LoadBalancer.pod
 lib/ResourcePool/LoadBalancer/RoundRobin.pm
 lib/ResourcePool/LoadBalancer/FallBack.pm
+lib/ResourcePool/LoadBalancer/FailBack.pm
+lib/ResourcePool/LoadBalancer/FailOver.pm
 lib/ResourcePool/LoadBalancer/LeastUsage.pm
 lib/ResourcePool/Factory.pm
 lib/ResourcePool/Factory.pod

@@ -6,7 +6,12 @@ See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
 Recent Changes
 --------------
-  *  A obsolete dependency for the Storable module has been removed. 
+  *  Two new LoadBalancer policies have been introduced: FailBack is 
+     a alias for FallBack, and FailOver which acts like FailBack but 
+     does stay on the fall back node. 
+
+  *  Applied patch from Eric Parusel to fix a problem when debuging 
+     LoadBalancer. 
 
 Installation
 ------------

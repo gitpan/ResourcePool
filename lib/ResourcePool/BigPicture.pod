@@ -73,7 +73,10 @@ RoundRobin
 LeastUsage 
 
 =item * 
-FallBack 
+FailBack 
+
+=item * 
+FailOver 
 
 =back
 

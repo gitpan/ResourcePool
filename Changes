@@ -1,8 +1,17 @@
 Changelog for ResourcePool
 
+V1.0102 - 2003-03-27
+
+  *  Two new LoadBalancer policies have been introduced: FailBack is 
+     a alias for FallBack, and FailOver which acts like FailBack but 
+     does stay on the fall back node. 
+
+  *  Applied patch from Eric Parusel to fix a problem when debuging 
+     LoadBalancer. 
+
 V1.0101 - 2003-03-14
 
-  *  A obsolete dependency for the Storable module has been removed. 
+  *  An obsolete dependency for the Storable module has been removed. 
 
 V1.0100 - 2003-02-27
 

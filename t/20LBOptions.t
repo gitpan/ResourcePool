@@ -1,8 +1,8 @@
 #! /usr/bin/perl -w
 #*********************************************************************
 #*** t/20LBOptions.t
-#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 20LBOptions.t,v 1.1 2002/10/12 17:21:10 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: 20LBOptions.t,v 1.1.4.1 2003/03/27 20:18:40 mws Exp $
 #*********************************************************************
 use strict;
 
@@ -32,7 +32,7 @@ sub timeinframe($$) {
 	}
 }
 
-BEGIN { plan tests => 30; };
+BEGIN { plan tests => 39; };
 
 # there shall be silence
 $SIG{'__WARN__'} = sub {};
@@ -42,8 +42,9 @@ my $f2 = ResourcePool::Factory->new('f2');
 my $f3 = ResourcePool::Factory->new('f3');
 my $f4 = ResourcePool::Factory->new('f4');
 my $f5 = ResourcePool::Factory->new('f5');
+my $f6 = ResourcePool::Factory->new('f6');
 
-ok ((defined $f1) && (defined $f2) && (defined $f3) && (defined $f4) && (defined $f5));
+ok ((defined $f1) && (defined $f2) && (defined $f3) && (defined $f4) && (defined $f5) && (defined $f6));
 
 my $p1 = ResourcePool->new($f1, MaxTry => 5);
 my $lb1 = ResourcePool::LoadBalancer->new('lb1', MaxTry => 3);
@@ -192,3 +193,90 @@ $f4->_my_very_private_and_secret_test_hook2(1);
 
 $r1 = $lb4->get();
 ok ($r1->{ARGUMENT} eq 'f4');
+
+# same again with FailBack
+
+my $lb5 = ResourcePool::LoadBalancer->new('lb5', Policy => 'FailBack', MaxTry => 1, SleepOnFail => [0]);
+my $p5 = ResourcePool->new($f5, MaxTry => 1);
+$lb5->add_pool($p5, Weight => 50, SuspendTimeout => 1);
+$lb5->add_pool($p3, Weight => 150);
+
+%cnt = ();
+for (my $i = 0; $i < 20; ++$i) {
+	$r2 = $lb5->get();
+	$lb5->free($r2);
+	$cnt{$r2->{ARGUMENT}}++;	
+}
+
+ok ($cnt{'f5'} == 20); # uses normally the first one
+
+$r2->_my_very_private_and_secret_test_hook(0);
+$f5->_my_very_private_and_secret_test_hook2(0);
+
+ok (defined ($r1 = $lb5->get()));
+$lb5->free($r1);
+
+%cnt= ();
+for (my $i = 0; $i < 20; ++$i) {
+	$r2 = $lb5->get();
+#	print($r2, "\n");
+	$lb5->free($r2);
+	$cnt{$r2->{ARGUMENT}}++;	
+}
+ok ($cnt{'f3'} == 20); # second one if first failed
+
+# p4 is supsended for 1 second, so sleep and see if it recoverS
+sleep(1);
+$f5->_my_very_private_and_secret_test_hook2(1);
+
+$r1 = $lb5->get();
+ok ($r1->{ARGUMENT} eq 'f5');
+
+
+# same again with FailBack
+
+my $lb6 = ResourcePool::LoadBalancer->new('lb6', Policy => 'FailOver', MaxTry => 1, SleepOnFail => [0]);
+my $p6 = ResourcePool->new($f6, MaxTry => 1);
+$lb6->add_pool($p6, Weight => 50, SuspendTimeout => 1);
+$lb6->add_pool($p3, Weight => 150);
+
+%cnt = ();
+for (my $i = 0; $i < 20; ++$i) {
+	$r2 = $lb6->get();
+	$lb6->free($r2);
+	$cnt{$r2->{ARGUMENT}}++;	
+}
+
+ok ($cnt{'f6'} == 20); # uses normally the first one
+
+$r2->_my_very_private_and_secret_test_hook(0);
+$f6->_my_very_private_and_secret_test_hook2(0);
+
+ok (defined ($r1 = $lb6->get()));
+$lb6->free($r1);
+
+%cnt= ();
+for (my $i = 0; $i < 20; ++$i) {
+	$r2 = $lb6->get();
+#	print($r2, "\n");
+	$lb6->free($r2);
+	$cnt{$r2->{ARGUMENT}}++;	
+}
+ok ($cnt{'f3'} == 20); # second one if first failed
+
+# p4 is supsended for 1 second, so sleep and see if it doesnt recover
+sleep(1);
+$f6->_my_very_private_and_secret_test_hook2(1);
+
+$r1 = $lb6->get();
+ok ($r1->{ARGUMENT} eq 'f3');
+
+# but if we fail again...
+
+$lb6->fail($r1);
+
+$r1 = $lb6->get();
+ok ($r1->{ARGUMENT} eq 'f6');
+
+
+

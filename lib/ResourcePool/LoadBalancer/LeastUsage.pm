@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer::LeastUsage
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LeastUsage.pm,v 1.6 2003/03/14 18:24:16 mws Exp $
+#*** $Id: LeastUsage.pm,v 1.6.2.1 2003/03/27 20:35:59 mws Exp $
 #*********************************************************************
 
 package ResourcePool::LoadBalancer::LeastUsage;
@@ -9,7 +9,7 @@ package ResourcePool::LoadBalancer::LeastUsage;
 use vars qw($VERSION @ISA);
 use ResourcePool::LoadBalancer;
 
-$VERSION = "1.0101";
+$VERSION = "1.0102";
 push @ISA, "ResourcePool::LoadBalancer";
 
 sub get_once($) {

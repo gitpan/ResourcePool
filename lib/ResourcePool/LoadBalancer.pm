@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LoadBalancer.pm,v 1.33 2003/03/14 18:24:15 mws Exp $
+#*** $Id: LoadBalancer.pm,v 1.33.2.1 2003/03/27 20:18:39 mws Exp $
 #*********************************************************************
 
 ######
@@ -18,7 +18,7 @@ use ResourcePool::Singleton;
 use ResourcePool::Command::Execute;
 
 push @ISA, ("ResourcePool::Command::Execute", "ResourcePool::Singleton");
-$VERSION = "1.0101";
+$VERSION = "1.0102";
 
 sub new($$@) {
 	my $proto = shift;
@@ -53,6 +53,8 @@ sub new($$@) {
 		$options{Policy} = uc($options{Policy});
 		if ($options{Policy} ne "LEASTUSAGE" && 
 			$options{Policy} ne "ROUNDROBIN" &&
+			$options{Policy} ne "FAILOVER" &&
+			$options{Policy} ne "FAILBACK" &&
 			$options{Policy} ne "FALLBACK") {
 				$options{Policy} = "LEASTUSAGE";
 		}
@@ -67,7 +69,7 @@ sub new($$@) {
 				= [($options{SleepOnFail}) x ($options{MaxTry} - 1)];
 		}
 		# truncate list if it is too long
-		$#{@{$options{SleepOnFail}}} = $options{MaxTry} - 2;
+		$#{$options{SleepOnFail}} = $options{MaxTry} - 2;
 
 
 		$self->{Policy}         = $options{Policy};
@@ -83,6 +85,10 @@ sub new($$@) {
 			$class .= "::LeastUsage";
 		} elsif ( $self->{Policy} eq "FALLBACK") {
 			$class .= "::FallBack";
+		} elsif ( $self->{Policy} eq "FAILBACK") {
+			$class .= "::FailBack";
+		} elsif ( $self->{Policy} eq "FAILOVER") {
+			$class .= "::FailOver";
 		}
 
 		eval "require $class";

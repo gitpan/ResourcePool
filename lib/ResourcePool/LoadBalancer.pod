@@ -54,9 +54,21 @@ If all L<ResourcePool's|ResourcePool> are equally used this policy will fall bac
 
 Iterates over all available L<ResourcePool's|ResourcePool> regardless of the usage of them. So, every time you call L<get()|/get> the next L<ResourcePool|ResourcePool> will be used.
 
-=item FallBack
+=item FailBack
 
 Uses always the first L<ResourcePool|ResourcePool> if it works, only if there is a problem it takes the next one (and so on). For this policy the order in which you pass the pools to ResourcePool::LoadBalancer is relevant.
+
+This policy will try to recover to the first pool.
+
+=item FailOver
+
+Uses always the first L<ResourcePool|ResourcePool> if it works, if there is a problem it will fail over to the second and stay there until it has a problem with this pool as well. If all pools failed, it starts from the first again. For this policy the order in which you pass the pools to ResourcePool::LoadBalancer is relevant.
+
+This policy will NOT try to recover to the first pool.
+
+=item FallBack
+
+A synonym for the FailBack policy.
 
 =back
 
@@ -164,12 +176,12 @@ A basic example...
  my $factory2 = ResourcePool::Factory::Net::LDAP->new("ldap2.you.com");
  my $pool2    = ResourcePool->new($factory2);
  
- # create a empty loadbalancer with a FallBack policy
+ # create a empty loadbalancer with a FailBack policy
  my $loadbalancer = ResourcePool::LoadBalancer->new("LDAP", 
-                        Policy => "FallBack");
+                        Policy => "FailBack");
  
  # add the first pool to the LoadBalancer
- # since this LoadBalancer was configured to use the FallBack
+ # since this LoadBalancer was configured to use the FailBack
  # policy, this is the primary used pool
  $loadbalancer->add_pool($pool1);
  
@@ -196,7 +208,7 @@ A basic example...
 
 Please notice that the L<get()|/get>/ L<free()|/free> stuff in this example in INSIDE the loop. This is very important to make sure the load balancing and fail over works. As for the L<ResourcePool|ResourcePool> the smartness of the load balancer lies in the L<get()|/get> method, so if you do not call the L<get()|/get> method regular you can not expect the load balancer to handle load balancing or fail over.
 
-The example above does not do any load balancing since the policy was set to FallBack. If you would change this to RoundRobin or LeastUsage you would spread the load across both servers.
+The example above does not do any load balancing since the policy was set to FailBack. If you would change this to RoundRobin or LeastUsage you would spread the load across both servers.
 
 You can directly copy and past the example above and try to run it. If you do not change the hostnames you will just see how it fails, but even this will tell you a lot about how it works. Give it a try.
 
@@ -228,10 +240,10 @@ This setup is simple if you keep in mind what I have said about the ResourcePool
  $replicaLB->add_pool($replica1);
  $replicaLB->add_pool($replica2);
  
- # create a superior loadbalancer which handles the FallBack to the
+ # create a superior loadbalancer which handles the FailBack to the
  # master if both replicas fail.
  my $loadbalancer = ResourcePool::LoadBalancer->new("LDAP", 
-                        Policy => "FallBack");
+                        Policy => "FailBack");
  $loadbalancer->add_pool($replicaLB);   # HERE IS THE MAGIC
  $loadbalancer->add_pool($master);
  
