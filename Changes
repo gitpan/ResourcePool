@@ -1,5 +1,14 @@
 Changelog for ResourcePool
 
+V1.0103 - 2003-05-07
+
+  *  Applied a patch from Chad Redman which is basically the same as 
+     the patch from Eric Parusel which was partitially applied to 
+     1.0102. This time I applied the patch to the correct CVS branch 
+     *argl*. 
+
+  *  Minor corrections and improvements in documentation. 
+
 V1.0102 - 2003-03-27
 
   *  Two new LoadBalancer policies have been introduced: FailBack is 

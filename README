@@ -6,12 +6,12 @@ See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
 Recent Changes
 --------------
-  *  Two new LoadBalancer policies have been introduced: FailBack is 
-     a alias for FallBack, and FailOver which acts like FailBack but 
-     does stay on the fall back node. 
+  *  Applied a patch from Chad Redman which is basically the same as 
+     the patch from Eric Parusel which was partitially applied to 
+     1.0102. This time I applied the patch to the correct CVS branch 
+     *argl*. 
 
-  *  Applied patch from Eric Parusel to fix a problem when debuging 
-     LoadBalancer. 
+  *  Minor corrections and improvements in documentation. 
 
 Installation
 ------------

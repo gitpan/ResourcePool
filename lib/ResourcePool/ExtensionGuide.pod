@@ -1,6 +1,6 @@
 =head1 NAME
 
-ResourcePool::ExtensionGuide - A extension guide for L<ResourcePool|ResourcePool>
+ResourcePool::ExtensionGuide - How to write extensions for L<ResourcePool|ResourcePool>
 
 =head1 DESCRIPTION
 
