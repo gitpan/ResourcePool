@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory::DBI
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: DBI.pm,v 1.20 2002/10/06 13:43:21 mws Exp $
+#*** $Id: DBI.pm,v 1.21 2002/10/12 17:25:01 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory::DBI;
@@ -12,7 +12,7 @@ use ResourcePool::Resource::DBI;
 use ResourcePool::Factory;
 use Data::Dumper;
 
-$VERSION = "0.9909";
+$VERSION = "0.9910";
 push @ISA, "ResourcePool::Factory";
 
 sub new($$$$$) {

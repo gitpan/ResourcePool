@@ -2,7 +2,7 @@
 #*********************************************************************
 #*** t/10PoolOptions.t
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 10PoolOptions.t,v 1.3 2002/07/10 16:06:33 mws Exp $
+#*** $Id: 10PoolOptions.t,v 1.4 2002/10/12 17:14:15 mws Exp $
 #*********************************************************************
 use strict;
 
@@ -26,7 +26,7 @@ sub timeinframe($$) {
 	if ( ($low <= $is) && ($is <= $high)) {
 		return 1;
 	} else {
-		printf(STDERR "Time test faild: (expected %ss, got %ss)\n", $should, $is);
+		printf(STDERR "# Time test faild: (expected %ss, got %ss)\n", $should, $is);
 		return 0;
 	}
 }

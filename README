@@ -6,17 +6,17 @@ See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
 Recent Changes
 --------------
-  *  A refactoring of the Singleton behavior of ResourcePool::Factory 
-     makes it possible to implement nicer factories 
+  *  The runtime overhead introduced by ResourcePool and LoadBalancer 
+     has been reduced. Depending on you configuration this release 
+     has up to 35% less overhead. 
 
-  *  Adopted ResourcePool::Factory::Net::LDAP to have a more native 
-     interface. 
+  *  Fixed a bug in LoadBalancer's documentation. The Weight 
+     parameter works only for the LeastUsage policy. 
 
-  *  Fixed links within the POD documentation (was broken for some 
-     pod2html translators) 
+  *  A general code cleanup has been done to gain the performance 
+     benefits. 
 
-  *  Added documentation for Net::LDAP bindings which were lost in 
-     the previous release. 
+  *  Added tests for LoadBalancer. 
 
 Installation
 ------------

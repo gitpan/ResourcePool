@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: ResourcePool.pm,v 1.35 2002/10/06 13:43:07 mws Exp $
+#*** $Id: ResourcePool.pm,v 1.43 2002/10/12 17:24:59 mws Exp $
 #*********************************************************************
 
 ######
@@ -25,21 +25,20 @@ BEGIN {
 
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9909";
+$VERSION = "0.9910";
  
 sub new($$@) {
 	my $proto = shift;
 	my $class = ref($proto) || $proto;
-	my $factory_notsingleton = shift;
-	my $factory = $factory_notsingleton->singleton();
-	my $self;
-	my $i;
-	$self = $class->SUPER::new($factory); # Singleton
+	my $factory = shift->singleton();
+	my $self = $class->SUPER::new($factory); # Singleton
 
 	if (!exists($self->{Factory})) {
 		$self->{Factory} = $factory;
 		$self->{FreePool} = [];
-		$self->{UsedPool} = [];
+		$self->{UsedPool} = {};
+		$self->{FreePoolSize} = 0;
+		$self->{UsedPoolSize} = 0;
 		my %options = (
 			Max => 5,
 			Min => 1,
@@ -51,6 +50,10 @@ sub new($$@) {
 			%options = ((%options), %{$_[0]});
 		} elsif (scalar(@_) > 1) {
 			%options = ((%options), @_);
+		}
+
+		if ($options{MaxTry} <= 1) {
+			$options{MaxTry} = 2;
 		}
 		# prepare SleepOnFail parameter, extend if neccessary
 		if (ref($options{SleepOnFail})) {
@@ -68,12 +71,12 @@ sub new($$@) {
 		
 		$self->{Max}			= $options{Max};
 		$self->{Min}			= $options{Min};
-		$self->{MaxTry}			= $options{MaxTry};
+		$self->{MaxTry}			= $options{MaxTry} - 1;
 		$self->{PreCreate}		= $options{PreCreate};
 		$self->{SleepOnFail}	= [reverse @{$options{SleepOnFail}}];
 
 		bless($self, $class);
-		for ($i = $self->{PreCreate}; $i > 0; $i--) {
+		for (my $i = $self->{PreCreate}; $i > 0; $i--) {
 			$self->inc_pool();
 		}
 	} 
@@ -84,34 +87,43 @@ sub new($$@) {
 sub get($) {
 	my ($self) = @_;
 	my $rec = undef;
-	my $maxtry = $self->{MaxTry} - 1;
+	my $maxtry = $self->{MaxTry};
+	my $rv = undef;
 
 	do {
-		if (scalar(@{$self->{FreePool}}) < 1) {
+		if (! $self->{FreePoolSize}) {
 			$self->inc_pool();
 		}
-		if (scalar(@{$self->{FreePool}}) >= 1) {
-			$rec = shift @{$self->{FreePool}};	
-			push @{$self->{UsedPool}}, $rec;
+		if ($self->{FreePoolSize}) {
+			$rec = shift @{$self->{FreePool}};
+			$self->{FreePoolSize}--;
 
 			if (! $rec->precheck()) {
 				swarn("ResourcePool(%s): precheck failed\n",
 					$self->{Factory}->info());
 				$rec->fail_close();
-				drop_from_list($rec, $self->{UsedPool});
 				undef $rec;
 			}
+			if ($rec) {
+				$rv = $rec->get_plain_resource();
+				$self->{UsedPool}->{$rv} = $rec;
+				$self->{UsedPoolSize}++;
+			}
 		} 
-	} while (! defined $rec &&  ($maxtry-- > 0) && ($self->sleepit($maxtry)));
-	return defined $rec ? $rec->get_plain_resource(): undef;
+	} while (! $rec &&  ($maxtry--) && ($self->sleepit($maxtry)));
+	return $rv;
 }
 
 sub free($$) {
 	my ($self, $plain_rec) = @_;
-	my $rec = $self->get_rec($plain_rec);
-	if (drop_from_list($rec, $self->{UsedPool})) {
+
+	my $rec = $self->{UsedPool}->{$plain_rec};
+	if ($rec) {
+		undef $self->{UsedPool}->{$plain_rec};
+		$self->{UsedPoolSize}--;
 		if ($rec->postcheck()) {
 			push @{$self->{FreePool}}, $rec;
+			$self->{FreePoolSize}++;
 		} else {
 			$rec->fail_close();
 		}
@@ -123,10 +135,13 @@ sub free($$) {
 
 sub fail($$) {
 	my ($self, $plain_rec) = @_;
-	my $rec = $self->get_rec($plain_rec);
+
 	swarn("ResourcePool(%s): got failed resource from client\n",
 		$self->{Factory}->info());
-	if (drop_from_list($rec, $self->{UsedPool})) {
+	my $rec = $self->{UsedPool}->{$plain_rec};
+	if (defined $rec) {
+		undef $self->{UsedPool}->{$plain_rec};
+		$self->{UsedPoolSize}--;
 		$rec->fail_close();
 		return 1;
 	} else {
@@ -140,11 +155,11 @@ sub downsize($) {
 
 	swarn("ResourcePool(%s): Downsizing\n", $self->{Factory}->info());
 	while ($rec =  shift(@{$self->{FreePool}})) {
-		#drop_from_list($rec, $self->{FreePool});
 		$rec->close();
 	}
+	$self->{FreePoolSize} = 0;
 	swarn("ResourcePool: Downsized... still %s open (%s)\n",
-		scalar(@{$self->{UsedPool}}), scalar(@{$self->{FreePool}}));
+		$self->{UsedPoolSize}, $self->{FreePoolSize});
 	
 }
 
@@ -152,7 +167,9 @@ sub postfork($) {
 	my ($self) = @_;
 	my $rec;
 	$self->{FreePool} = [];
-	$self->{UsedPool} = [];
+	$self->{UsedPool} = {};
+	$self->{FreePoolSize} = 0;
+	$self->{UsedPoolSize} = 0;
 }
 
 sub info($) {
@@ -174,18 +191,18 @@ sub setMax($$) {
 
 sub print_status($) {
 	my ($self) = @_;
-	printf("\t\t\t\t\tDB> FreePool: <%d>", scalar(@{$self->{FreePool}}));
-	printf(" UsedPool: <%d>\n", scalar(@{$self->{UsedPool}}));
+	printf("\t\t\t\t\tDB> FreePool: <%d>", $self->{FreePoolSize});
+	printf(" UsedPool: <%d>\n", $self->{UsedPoolSize});
 }
 
 sub get_stat_used($) {
 	my ($self) = @_;
-	return scalar(@{$self->{UsedPool}});
+	return $self->{UsedPoolSize};
 }
 
 sub get_stat_free($) {
 	my ($self) = @_;
-	return scalar(@{$self->{FreePool}});
+	return $self->{FreePoolSize};
 }
 
 #*********************************************************************
@@ -197,25 +214,15 @@ sub inc_pool($) {
 	my $rec;	
 	my $PoolSize;
 
-	$PoolSize=scalar(@{$self->{FreePool}}) + scalar(@{$self->{UsedPool}});
+	$PoolSize=$self->{FreePoolSize} + $self->{UsedPoolSize};
 
 	if ( (! defined $self->{Max}) || ($PoolSize < $self->{Max})) {
 		$rec = $self->{Factory}->create_resource();
 	
 		if (defined $rec) {
 			push @{$self->{FreePool}}, $rec;
+			$self->{FreePoolSize}++;
 		}	
-	}
-}
-
-sub get_rec($$) {
-	my ($self, $plain_res) = @_;
-	my $item;
-
-	foreach $item (@{$self->{UsedPool}}) {
-		if ($item->get_plain_resource() eq $plain_res) {
-			return $item;
-		}
 	}
 }
 
@@ -231,26 +238,6 @@ sub sleepit($$) {
 #*********************************************************************
 #*** Functional Part
 #*********************************************************************
-
-sub drop_from_list($$) {
-	my ($val, $list_ref) = @_;
-	my $item;
-	my @new = ();
-	my $found = 0;
-	
-	foreach $item (@{$list_ref}) {
-		if ($item ne $val) {
-			push @new, $item;
-		} else {
-			$found = 1;
-		}
-	}
-
-	if ($found) {
-		@{$list_ref} = @new;
-	} 
-	return $found;
-}
 
 sub swarn($@) {
 	my $fmt = shift;

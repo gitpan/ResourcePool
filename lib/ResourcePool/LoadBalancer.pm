@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LoadBalancer.pm,v 1.22 2002/10/06 13:43:21 mws Exp $
+#*** $Id: LoadBalancer.pm,v 1.27 2002/10/12 17:25:00 mws Exp $
 #*********************************************************************
 
 ######
@@ -17,7 +17,7 @@ use vars qw($VERSION @ISA);
 use ResourcePool::Singleton;
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9909";
+$VERSION = "0.9910";
 
 sub new($$@) {
 	my $proto = shift;
@@ -25,11 +25,12 @@ sub new($$@) {
 	my $key = shift;
 	my $self;
 
-	$self = $class->SUPER::new("LoadBalancer". $key); # Singleton
+	$self = $class->SUPER::new($key); # Singleton
 
 	if (! exists($self->{Policy})) {
 		$self->{key} = $key;
 		$self->{PoolArray} = (); # empty pool list
+		$self->{PoolArraySize} = 0; # empty pool list
 		$self->{PoolHash} = (); # empty pool hash
 		$self->{UsedPool} = (); # mapping from plain_resource to
 					# rich pool
@@ -72,30 +73,41 @@ sub new($$@) {
 		$self->{StatSuspend} = 0;
 		$self->{StatSuspendAll} = 0;
 		$self->{SleepOnFail} = [reverse @{$options{SleepOnFail}}];
-	}
 
-	bless($self, $class);
+		if ($self->{Policy} eq "ROUNDROBIN") {
+			$class .= "::RoundRobin";
+		} elsif ( $self->{Policy} eq "LEASTUSAGE") {
+			$class .= "::LeastUsage";
+		} elsif ( $self->{Policy} eq "FALLBACK") {
+			$class .= "::FallBack";
+		}
+
+		eval "require $class";
+		bless($self, $class);
+	}
 	return $self;
 }
 
 sub add_pool($$@) {
 	my $self = shift;
 	my $pool = shift;
-	my %rich_pool = (
-		pool => $pool,
-		BadCount => 0,
-		SuspendTrigger	=> 1,
-		SuspendTimeout	=> 5,
-		Suspended       => 0,
-		Weight		=> 100,
-		@_,
-		UsageCount	=> 0,
-		StatSuspend => 0,
-		StatSuspendTime => 0	
-	);
-	if (! exists $self->{PoolHash}->{$pool}) {
+
+	if (! $self->{PoolHash}->{$pool}) {
+		my %rich_pool = (
+			pool => $pool,
+			BadCount => 0,
+			SuspendTrigger	=> 1,
+			SuspendTimeout	=> 5,
+			Suspended       => 0,
+			Weight		=> 100,
+			@_,
+			UsageCount	=> 0,
+			StatSuspend => 0,
+			StatSuspendTime => 0	
+		);
 		push @{$self->{PoolArray}}, \%rich_pool;
 		$self->{PoolHash}->{$pool} = \%rich_pool;
+		$self->{PoolArraySize}++;
 	}
 }
 
@@ -108,137 +120,37 @@ sub get($) {
 	my $r_pool;
 
 	do {
-		$trylength = scalar(@{$self->{PoolArray}}) - $self->{StatSuspend};
+		$trylength = $self->{PoolArraySize} - $self->{StatSuspend};
 		do {
-			if ($self->{Policy} eq "ROUNDROBIN") {
-				($rec, $r_pool) = $self->get_next();
-			} elsif ($self->{Policy} eq "LEASTUSAGE") {
-				($rec, $r_pool) = $self->get_least();
-			} elsif ($self->{Policy} eq "FALLBACK") {
-				($rec, $r_pool) = $self->get_fallback();
-			}
-		} while (! defined $rec && ($trylength-- > 0));
-	} while (! defined $rec && ($maxtry-- > 0) && ($self->sleepit($maxtry)));
+			($rec, $r_pool) = $self->get_once();
+		} while (! $rec && ($trylength-- > 0));
+	} while (! $rec && ($maxtry--) && ($self->sleepit($maxtry)));
 
-	if (defined $rec) {
+	if ($rec) {
 		$self->{UsedPool}->{$rec} = $r_pool;
 	}
 	return $rec;
 }
 
-# RoundRobin implementation
-sub get_next($) {
-	my ($self) = @_;
-	my $rec;
-	my $r_pool;
-
-	$r_pool = $self->{PoolArray}->[$self->{Next}++];
-	if ($self->{Next} >= scalar(@{$self->{PoolArray}})) {
-		$self->{Next} = 0;
-	}
-	if (! $self->chk_suspend($r_pool)) {
-		$rec = $r_pool->{pool}->get();
-		if (! defined $rec) {
-			$self->suspend($r_pool);
-		}
-	}
-	if ( $self->chk_suspend($r_pool)) {
-		undef $rec;
-		undef $r_pool;
-	}
-	return ($rec, $r_pool);
-}
-
-# LeastUsage implementation
-sub get_least($) {
-	my ($self) = @_;
-	my ($rec, $pool);
-	my ($least_val, $least_r_pool);
-	my $r_pool;
-	my $val;
-
-	foreach $r_pool (@{$self->{PoolArray}}) {
-		if ($self->chk_suspend($r_pool)) {
-			next; # skip suspended
-		}
-		if (! defined $least_val) {
-			$least_val = $r_pool->{pool}->get_stat_used() * 
-					$r_pool->{Weight};
-			$least_r_pool = $r_pool;
-		} else {
-			$val = $r_pool->{pool}->get_stat_used() * 
-					$r_pool->{Weight};
-			if ($val < $least_val) {
-				$least_val = $val;
-				$least_r_pool = $r_pool;
-			} elsif ($val == $least_val) {
-				if ($r_pool->{UsageCount} < 
-						$least_r_pool->{UsageCount}) {
-					$least_val = $val;
-					$least_r_pool = $r_pool;
-				}
-			}
-		}
-	}	
-    if (defined $least_r_pool) {
-		$rec = $least_r_pool->{pool}->get();
-		if (! defined $rec) {
-			$self->suspend($least_r_pool);
-			undef $rec;
-			undef $r_pool;
-		} else {
-			$least_r_pool->{UsageCount} += $least_r_pool->{Weight};
-		}
-	}
-	return ($rec, $least_r_pool);		
-}
-
-# FallBack implementation
-sub get_fallback($) {
-	my ($self) = @_;
-	my ($rec, $r_pool);
-	my $i = 0;
-
-	do {	# get first not suspended pool 
-		$r_pool = $self->{PoolArray}->[$i++];
-	} while (defined $r_pool && $self->chk_suspend($r_pool)) ;
-
-	if (defined $r_pool) {	 #
-		$rec = $r_pool->{pool}->get();
-		if (! defined $rec) {
-			$self->suspend($r_pool);
-		}
-
-		if (defined $self->{LastUsedPool} && $r_pool ne $self->{LastUsedPool}) {
-			$self->{LastUsedPool}->{pool}->downsize();
-		}
-		$self->{LastUsedPool} = $r_pool;
-	}
-	if (! defined $rec) {
-		undef $r_pool;
-	}
-	return ($rec, $r_pool);
-}
-
 sub free($$) {
 	my ($self, $rec) = @_;
+	return unless defined $rec;
 	my $r_pool = $self->{UsedPool}->{$rec};	
 
-	if (defined $r_pool) {
+	if ($r_pool) {
 		$r_pool->{pool}->free($rec);
-		if ($self->chk_suspend_no_recover($r_pool)) {
-			$r_pool->{pool}->downsize();
-		}
-		if ($self->{Policy} eq "FALLBACK") {
-			if ($r_pool ne $self->{LastUsedPool}) {
-				$self->{LastUsedPool}->{pool}->downsize();
-			}
-		}
 		undef $self->{UsedPool}->{$rec};
-		return 1;
+#		if ($self->chk_suspend_no_recover($r_pool)) {
+#			$r_pool->{pool}->downsize();
+#		}
+		return $self->free_policy($r_pool);
 	} else {
 		return 0;
 	}
+}
+
+sub free_policy($$) {
+	return 1;
 }
 
 sub fail($$) {
@@ -300,15 +212,17 @@ sub suspend($$) {
 	my ($self, $r_pool) = @_;
 #	my $r_pool = $self->{PoolHash}->{$pool};
 
-	swarn("LoadBalancer(%s): Suspending pool to '%s' for %s seconds\n",
-		$self->{key},
-		$r_pool->{pool}->info(),
-		$r_pool->{SuspendTimeout});
-	$r_pool->{Suspended} = time + $r_pool->{SuspendTimeout};
-	$r_pool->{pool}->downsize();
-	$r_pool->{StatSuspend}++;
-	$self->{StatSuspend}++;
-	$self->{StatSuspendAll}++;
+	if (! $self->chk_suspend_no_recover($r_pool)) {
+		swarn("LoadBalancer(%s): Suspending pool to '%s' for %s seconds\n",
+			$self->{key},
+			$r_pool->{pool}->info(),
+			$r_pool->{SuspendTimeout});
+		$r_pool->{Suspended} = time + $r_pool->{SuspendTimeout};
+		$r_pool->{pool}->downsize();
+		$r_pool->{StatSuspend}++;
+		$self->{StatSuspend}++;
+		$self->{StatSuspendAll}++;
+	}
 }
 
 sub chk_suspend($$) {
@@ -326,15 +240,19 @@ sub chk_suspend($$) {
 			swarn("LoadBalancer(%s): Recovering pool to '%s'\n",
 				$self->{key},
 				$r_pool->{pool}->info());
+			return 0;
+		} else {
+			return 1;
 		}
+	} else {
+		return 0;
 	}
-	return $self->chk_suspend_no_recover($r_pool);
 }
 
 sub chk_suspend_no_recover($$) {
 	my ($self, $r_pool) = @_;
 
-	return $r_pool->{Suspended} > 0;
+	return $r_pool->{Suspended};
 }
 
 sub get_avg_usagecount($) {

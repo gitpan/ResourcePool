@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Singleton.pm
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Singleton.pm,v 1.8 2002/10/06 13:43:21 mws Exp $
+#*** $Id: Singleton.pm,v 1.10 2002/10/12 17:25:00 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Singleton;
@@ -9,7 +9,7 @@ package ResourcePool::Singleton;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "0.9909";
+$VERSION = "0.9910";
 
 BEGIN {
 	my $key_hash = {};
@@ -19,10 +19,9 @@ BEGIN {
 		my $key = shift || 'UKN';
 		my $self = {};
 		
-		if (exists($key_hash->{$class}) && 
-			exists($key_hash->{$class}->{$key})) 
-		{
-			return $key_hash->{$class}->{$key};
+		my $rv = $key_hash->{$class}->{$key};
+		if ($rv) {
+			return $rv;
 		}
 
 		$key_hash->{$class}->{$key} = $self;

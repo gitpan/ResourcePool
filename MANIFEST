@@ -7,6 +7,9 @@ lib/ResourcePool.pod
 lib/ResourcePool/Singleton.pm
 lib/ResourcePool/Singleton.pod
 lib/ResourcePool/LoadBalancer.pm
+lib/ResourcePool/LoadBalancer/RoundRobin.pm
+lib/ResourcePool/LoadBalancer/FallBack.pm
+lib/ResourcePool/LoadBalancer/LeastUsage.pm
 lib/ResourcePool/LoadBalancer.pod
 lib/ResourcePool/Resource/Net/LDAP.pm
 lib/ResourcePool/Resource/Net/LDAP.pod
@@ -28,6 +31,7 @@ t/02FactorySingleton.t
 t/03ResourcePoolSingleton.t
 t/04LBSingleton.t
 t/10PoolOptions.t
+t/20LBOptions.t
 t/11Resource.t
 t/30DBI.t
 t/40LDAP.t

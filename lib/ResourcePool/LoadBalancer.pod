@@ -102,6 +102,8 @@ The L<ResourcePool|ResourcePool> being added.
 
 Weight may make one L<ResourcePool|ResourcePool> more relevant then others. A L<ResourcePool|ResourcePool> with a high Weight is more expansive then a L<ResourcePool|ResourcePool>with a low Weight and will be used less frequent by the load balancer.
 
+Note: The only policy which takes the Weighting into account is LeastUsage.
+
 Default: 100
 
 =item B<SuspendTimeout>

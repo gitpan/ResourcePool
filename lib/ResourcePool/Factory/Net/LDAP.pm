@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory::Net::LDAP
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.19 2002/10/06 13:43:21 mws Exp $
+#*** $Id: LDAP.pm,v 1.20 2002/10/12 17:25:03 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory::Net::LDAP;
@@ -12,14 +12,14 @@ use ResourcePool::Resource::Net::LDAP;
 use Data::Dumper;
 
 push @ISA, "ResourcePool::Factory";
-$VERSION = "0.9909";
+$VERSION = "0.9910";
 
 ####
 # Some notes about the singleton behavior of this class.
 # 1. the constructor does not return a singleton reference!
 # 2. there is a seperate function called singelton() which will return a
 #    singleton reference
-# this change was introduces with ResourcePool 0.9909 to allow more flexible
+# this change was introduces with ResourcePool 0.9910 to allow more flexible
 # factories (e.g. factories which do not require all parameters to their 
 # constructor) an example of such an factory is the Net::LDAP factory.
 

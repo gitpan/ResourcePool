@@ -1,5 +1,19 @@
 Changelog for ResourcePool
 
+V0.9910 - 2002-11-25
+
+  *  The runtime overhead introduced by ResourcePool and LoadBalancer 
+     has been reduced. Depending on you configuration this release 
+     has up to 35% less overhead. 
+
+  *  Fixed a bug in LoadBalancer's documentation. The Weight 
+     parameter works only for the LeastUsage policy. 
+
+  *  A general code cleanup has been done to gain the performance 
+     benefits. 
+
+  *  Added tests for LoadBalancer. 
+
 V0.9909 - 2002-10-07
 
   *  A refactoring of the Singleton behavior of ResourcePool::Factory 
