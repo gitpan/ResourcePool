@@ -1,5 +1,9 @@
 Changelog for ResourcePool
 
+V1.0101 - 2003-03-14
+
+  *  A obsolete dependency for the Storable module has been removed. 
+
 V1.0100 - 2003-02-27
 
   *  This release introduces a new way to use ResourcePool and 

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Command::Execute
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Execute.pm,v 1.3 2003/02/27 21:43:56 mws Exp $
+#*** $Id: Execute.pm,v 1.4 2003/03/14 18:24:15 mws Exp $
 #*********************************************************************
 package ResourcePool::Command::Execute;
 
@@ -9,7 +9,7 @@ use ResourcePool::Command::Exception;
 use vars qw($VERSION);
 use Data::Dumper;
 
-$VERSION = "1.0100";
+$VERSION = "1.0101";
 
 sub execute($$@) {
 	my ($self, $command, @addargs) = @_;

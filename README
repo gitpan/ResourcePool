@@ -6,11 +6,7 @@ See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
 Recent Changes
 --------------
-  *  This release introduces a new way to use ResourcePool and 
-     LoadBalancer. It implements the Command design pattern as 
-     described in the GOF Design Patterns book. This release is a 
-     preview, the features are not yet fully implemented and might 
-     therefore not sufficient for you needs right now. 
+  *  A obsolete dependency for the Storable module has been removed. 
 
 Installation
 ------------

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer::RoundRobin
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: RoundRobin.pm,v 1.6 2003/01/10 23:08:16 mws Exp $
+#*** $Id: RoundRobin.pm,v 1.7 2003/03/14 18:24:16 mws Exp $
 #*********************************************************************
 
 package ResourcePool::LoadBalancer::RoundRobin;
@@ -9,7 +9,7 @@ package ResourcePool::LoadBalancer::RoundRobin;
 use vars qw($VERSION @ISA);
 use ResourcePool::LoadBalancer;
 
-$VERSION = "1.0100";
+$VERSION = "1.0101";
 push @ISA, "ResourcePool::LoadBalancer";
 
 sub get_once($) {

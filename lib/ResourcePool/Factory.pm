@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Factory.pm,v 1.28 2003/01/10 23:08:16 mws Exp $
+#*** $Id: Factory.pm,v 1.30 2003/03/14 18:24:15 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory;
@@ -11,10 +11,9 @@ use vars qw($VERSION @ISA);
 use ResourcePool::Singleton;
 use ResourcePool::Resource;
 use Data::Dumper;
-use Storable;
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "1.0100";
+$VERSION = "1.0101";
 
 ####
 # Some notes about the singleton behavior of this class.
