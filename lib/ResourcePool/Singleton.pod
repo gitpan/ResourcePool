@@ -56,6 +56,11 @@ Identifies the created object.
 
 =back
 
+=head2 S<$singleton-E<gt>is_created($key)>
+
+This returns true if a singleton object has been created with the given key. The actual object may be retrieved with the new method.
+
+
 =head1 Why not Class::Singleton?
 
 
@@ -88,7 +93,7 @@ L<Class::Singleton|Class::Singleton>
 
 =head1 AUTHOR
 
-    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
+    Copyright (C) 2001-2003 by Markus Winand <mws@fatalmind.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the same terms as Perl itself.

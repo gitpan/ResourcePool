@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Factory.pm,v 1.24 2002/10/12 17:25:00 mws Exp $
+#*** $Id: Factory.pm,v 1.24.2.1 2002/12/22 11:58:55 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory;
@@ -14,14 +14,14 @@ use Data::Dumper;
 use Storable;
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9910";
+$VERSION = "1.0000";
 
 ####
 # Some notes about the singleton behavior of this class.
 # 1. the constructor does not return a singleton reference!
 # 2. there is a seperate function called singelton() which will return a
 #    singleton reference
-# this change was introduces with ResourcePool 0.9910 to allow more flexible
+# this change was introduces with ResourcePool 1.0000 to allow more flexible
 # factories (e.g. factories which do not require all parameters to their 
 # constructor) an example of such an factory is the Net::LDAP factory.
 

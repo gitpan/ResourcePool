@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Singleton.pm
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Singleton.pm,v 1.10 2002/10/12 17:25:00 mws Exp $
+#*** $Id: Singleton.pm,v 1.10.2.2 2002/12/22 12:02:23 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Singleton;
@@ -9,7 +9,7 @@ package ResourcePool::Singleton;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "0.9910";
+$VERSION = "1.0000";
 
 BEGIN {
 	my $key_hash = {};
@@ -31,5 +31,14 @@ BEGIN {
 		return $self;
 
 	}
+
+	sub is_created($$) {
+		my $proto = shift;
+		my $class = ref($proto) || $proto;
+		my $key = shift || 'UKN';
+
+		return defined $key_hash->{$class}->{$key};
+	}
+
 }
 1;

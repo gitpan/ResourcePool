@@ -1,5 +1,16 @@
 Changelog for ResourcePool
 
+V1.0000 - 2003-01-02
+
+  *  From this release on, the ResourcePool package will not contain 
+     resource bindings anymore. The previously included bindings for 
+     DBI and Net::LDAP are available in the ResourcePool-Resource-DBI 
+     and ResourcePool-Resource-Net-LDAP packages on CPAN. 
+
+  *  Applied patch from James G Smith which introduced the is_created 
+     method to ResourcePool::Singleton. This does not change the 
+     behavior of any ResourcePool module. 
+
 V0.9910 - 2002-11-25
 
   *  The runtime overhead introduced by ResourcePool and LoadBalancer 

@@ -44,7 +44,7 @@ To create a L<ResourcePool|ResourcePool> you need a L<ResourcePool::Factory|Reso
 
 The L<ResourcePool::Resource|ResourcePool::Resource> itself creates the finally interesting objects like L<DBI|DBI> or L<Net::LDAP|Net::LDAP> and provides a standard way to perform the common operations required by L<ResourcePool|ResourcePool> to work with this resource.
 
-The L<ResourcePool::Factory|ResourcePool::Factory> and L<ResourcePool::Resource|ResourcePool::Resource> classes are base classes to inherit the specialized classes for your resource from. The classes to handle L<DBI|DBI> and L<Net::LDAP|Net::LDAP> resources are included in the distribution.
+The L<ResourcePool::Factory|ResourcePool::Factory> and L<ResourcePool::Resource|ResourcePool::Resource> classes are base classes to inherit the specialized classes for your resource from. The classes to handle L<DBI|DBI> and L<Net::LDAP|Net::LDAP> resources are available as separate distributions on CPAN.
 
 After creating a L<ResourcePool|ResourcePool> you can use the L<get()|ResourcePool/get> method to obtain a resource. The L<get()|ResourcePool/get> method will return the L<DBI|DBI> or L<Net::LDAP|Net::LDAP> object which can be used as usually. Afterwards you have to hand the resource back into the pool by calling the L<free()|ResourcePool/free> method.
 
@@ -89,7 +89,7 @@ L<ResourcePool::UML|ResourcePool::UML>
 
 =head1 AUTHOR
 
-    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
+    Copyright (C) 2001-2003 by Markus Winand <mws@fatalmind.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the same terms as Perl itself.

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** Makefile.PL
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Makefile.PL,v 1.14 2002/10/12 17:24:58 mws Exp $
+#*** $Id: Makefile.PL,v 1.14.2.2 2002/12/22 13:08:57 mws Exp $
 #*********************************************************************
 
 use ExtUtils::MakeMaker qw(prompt WriteMakefile);
@@ -12,7 +12,7 @@ use Data::Dumper;
 my %opts;
 
 $opts{NAME}	= 'ResourcePool',
-$opts{VERSION} = '0.9910';
+$opts{VERSION} = '1.0000';
 
 if ($ExtUtils::MakeMaker::VERSION >= 5.43) {
     $opts{ABSTRACT} = 'A connection caching and pooling class.';
@@ -74,3 +74,37 @@ if (exists $INC{"Net/LDAP.pm"}) {
 
 } # disabled
 WriteMakefile(%opts);
+
+eval("use ResourcePool;");
+eval("use DBI;");
+eval("use Net::LDAP;");
+
+if (exists $INC{"ResourcePool.pm"}) {
+	my @suggestion;
+	if ($ResourcePool::VERSION < 1.0000) {
+		print("\n=================================================================================\n");
+		printf("\n\nYou are upgrading from ResourcePool %s to %s!\n\n", 
+			$ResourcePool::VERSION, $opts{VERSION});
+		print( <<PLAIN_TEXT );
+The bindings for DBI and Net::LDAP which were previously included
+in the ResourcePool core package have been removed from this distribution.
+
+Anyway, they are available as separate distributions on CPAN.
+
+PLAIN_TEXT
+
+		if (exists $INC{"DBI.pm"}) {
+			push @suggestion, "ResourcePool::Resource::DBI";
+		}
+		if (exists $INC{"Net/LDAP.pm"}) {
+			push @suggestion, "ResourcePool::Resource::Net::LDAP";
+		}
+		if (scalar(@suggestion) > 0) {
+			print("For this system it looks like you need to install those packages:\n");
+			foreach $pack (@suggestion) {
+				printf("   -> %s\n", $pack);
+			}
+		}
+		print("\n=================================================================================\n");
+	}
+}

@@ -11,14 +11,6 @@ lib/ResourcePool/LoadBalancer/RoundRobin.pm
 lib/ResourcePool/LoadBalancer/FallBack.pm
 lib/ResourcePool/LoadBalancer/LeastUsage.pm
 lib/ResourcePool/LoadBalancer.pod
-lib/ResourcePool/Resource/Net/LDAP.pm
-lib/ResourcePool/Resource/Net/LDAP.pod
-lib/ResourcePool/Resource/DBI.pm
-lib/ResourcePool/Resource/DBI.pod
-lib/ResourcePool/Factory/Net/LDAP.pm
-lib/ResourcePool/Factory/Net/LDAP.pod
-lib/ResourcePool/Factory/DBI.pm
-lib/ResourcePool/Factory/DBI.pod
 lib/ResourcePool/Factory.pm
 lib/ResourcePool/Factory.pod
 lib/ResourcePool/Resource.pm
@@ -33,5 +25,3 @@ t/04LBSingleton.t
 t/10PoolOptions.t
 t/20LBOptions.t
 t/11Resource.t
-t/30DBI.t
-t/40LDAP.t
