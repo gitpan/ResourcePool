@@ -2,23 +2,23 @@
 #*********************************************************************
 #*** t/03ResourcePoolSingleton.t
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 03ResourcePoolSingleton.t,v 1.3 2002/07/05 20:32:25 mws Exp $
+#*** $Id: 03ResourcePoolSingleton.t,v 1.4 2002/07/25 18:21:37 mws Exp $
 #*********************************************************************
 use strict;
 use Test;
 BEGIN {
-	eval "use ResourcePool::Factory::DBI";
-	eval "use ResourcePool::Factory::Net::LDAP";
+	eval "use DBI; use ResourcePool::Factory::DBI";
+	eval "use Net::LDAP; use ResourcePool::Factory::Net::LDAP";
 }
 use ResourcePool;
 
 BEGIN { plan tests => 1; };
 
 my ($f1, $f2);
-if (exists $INC{"ResourcePool/Factory/DBI.pm"}) {
+if (exists $INC{"DBI.pm"}) {
 	$f1 = new ResourcePool::Factory::DBI->new("DataSource1", "user", "pass");
 	$f2 = new ResourcePool::Factory::DBI->new("DataSource2", "user", "pass");
-} elsif (exists $INC{"ResourcePool/Factory/Net/LDAP.pm"}) {
+} elsif (exists $INC{"Net/LDAP.pm"}) {
 	$f1 = new ResourcePool::Factory::Net::LDAP->new("hostname1");
 	$f2 = new ResourcePool::Factory::Net::LDAP->new("hostname2");
 }

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource::Net::LDAP
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.12.2.2 2002/08/30 16:38:45 mws Exp $
+#*** $Id: LDAP.pm,v 1.19 2002/09/28 10:32:05 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource::Net::LDAP;
@@ -11,9 +11,8 @@ use strict;
 use Net::LDAP;
 use Net::LDAP::Constant qw(:all);
 use ResourcePool::Resource;
-use Data::Dumper;
 
-$VERSION = "0.9907";
+$VERSION = "0.9908";
 push @ISA, "ResourcePool::Resource";
 
 sub new($$$@) {
@@ -35,9 +34,8 @@ sub new($$$@) {
 	
         bless($self, $class);
 
-	return $self->bind();
-
-        return $self;
+	# bind returns $self on success
+	return $self->bind($self->{BindOptions});
 }
 
 sub close($) {
@@ -52,11 +50,6 @@ sub fail_close($) {
 		$self->{Factory}->info());
 }
 
-#sub postcheck($) {
-#	my ($self) = @_;	
-#	return 1;
-#}
-
 sub get_plain_resource($) {
 	my ($self) = @_;
 	return $self->{ldaph};
@@ -69,34 +62,22 @@ sub DESTROY($) {
 
 sub precheck($) {
 	my ($self) = @_;
-	return $self->bind();
+	return $self->bind($self->{BindOptions});
 }
 
 
-sub bind($) {
-	my ($self) = @_;
-	my %BindOptions = (@{$self->{BindOptions}});
+sub bind($$) {
+	my ($self, $bindopts) = @_;
+	my @BindOptions = @{$bindopts};
 	my $rc;
 	
-	if ( defined $BindOptions{dn}) {
-		$rc = $self->{ldaph}->bind(@{$self->{BindOptions}});
-	} else {
-		$rc = $self->{ldaph}->bind();
-	}
+	$rc = $self->{ldaph}->bind(@BindOptions);
 
 	if ($rc->code != LDAP_SUCCESS) {
-		if (defined $BindOptions{dn}) {
-			swarn("ResourcePool::Resource::Net::LDAP: ".
-				"Bind as '%s' to '%s' failed: %s\n",
-				$BindOptions{dn},
-				$self->{Factory}->info(),
-				$rc->error());
-		} else {
-			swarn("ResourcePool::Resource::Net::LDAP: ".
-				"anonymous Bind to '%s' failed: %s\n",
-				$self->{Factory}->info(),
-				$rc->error());
-		}
+		swarn("ResourcePool::Resource::Net::LDAP: ".
+			"Bind to '%s' failed: %s\n",
+			$self->{Factory}->info(),
+			$rc->error());
 		delete $self->{ldaph};
 		return undef;
 	}
@@ -110,53 +91,3 @@ sub swarn($@) {
 	warn sprintf($fmt, @_);
 }
 1;
-
-=head1 NAME
-
-ResourcePool::Resource::Net::LDAP - A ResourcePool wrapper for Net::LDAP
-
-=head1 SYNOPSIS
-
- use ResourcePool::Resource::Net::LDAP;
-
- my $resource = ResourcePool::Resource::Net::LDAP->new(
-                   $factory,
-                   $hostname, 
-                   [@NamedBindOptions],
-                   [@NamedNewOptions]);
-
-=head1 DESCRIPTION
-
-This class is used by the ResourcePool internally to create Net::LDAP 
-connections.
-It's called by the corresponding ResourcePool::Factory::Net::LDAP object 
-which passes the parameters needed to establish the Net::LDAP connection.
-
-The only thing which has to been known by an application developer about this
-class is the implementation of the precheck() and postcheck() methods:
-
-=over 4
-
-=item precheck()
-
-Performs a bind(), either anonymous or with dn and password (depends on the
-arguments to ResourcePool::Factory::Net::LDAP). 
-
-Returns true on success and false if the bind failed (regardless of the reason).
-
-=item postcheck()
-
-Does not implement any postcheck().
-
-=head1 SEE ALSO
-
-L<ResourcePool(3pm)>, 
-L<ResourcePool::Resource(3pm)>
-
-=head1 AUTHOR
-
-    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
-
-    This program is free software; you can redistribute it and/or
-    modify it under the same terms as Perl itself.
-

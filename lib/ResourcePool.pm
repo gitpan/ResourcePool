@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: ResourcePool.pm,v 1.32.2.1 2002/08/30 16:25:08 mws Exp $
+#*** $Id: ResourcePool.pm,v 1.33 2002/09/02 10:22:57 mws Exp $
 #*********************************************************************
 
 ######
@@ -25,7 +25,7 @@ BEGIN {
 
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9907";
+$VERSION = "0.9908";
  
 sub new($$@) {
 	my $proto = shift;

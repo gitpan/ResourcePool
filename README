@@ -6,16 +6,20 @@ See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
 Recent Changes
 --------------
-    * Fixed a major bug in Net::LDAP bindings which was introduced in
-      V0.9906. Every LDAP connection was believed to be broken when
-      handed back via free().
+  *  Added documentation: ResourcePool::BigPicture, ResourcePool::UML 
+     and ResourcePool::ExtensionGuide 
+
+  *  Changed Net::LDAP factory to accept the bind parameters in the 
+     same way as Net::LDAP expects them. 
+
+  *  Added tests 
 
 Installation
 ------------
     ResourcePool is a pure perl implemented module and should 
-    therfore run everywhere where perl is already installed.
+    therefore run everywhere where perl is already installed.
 
-    The well known procedure is.
+    The well known procedure is:
         perl Makefile.PL
         make
         make test
@@ -24,9 +28,10 @@ Installation
 Examples
 --------
     Are included in the manpages which come with this distribution.
-    The ResourcePool(3pm) manpage is the right point to start, 
-    after this you should dirctly go to the 
-    ResourcePool::LoadBalancer(3pm) to feel the power.
+    The ResourcePool::BigPicture(3pm) manpage is the right point 
+    to start to get the overview, after that feel free to visit
+    the ResourcePool(3pm) and ResourcePool::LoadBalancer(3pm)
+    manpages.
 
 
 More information

@@ -2,17 +2,24 @@
 #*********************************************************************
 #*** t/02DBIFactorySingleton.t
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 02FactorySingleton.t,v 1.7 2002/07/08 20:07:43 mws Exp $
+#*** $Id: 02FactorySingleton.t,v 1.8 2002/09/28 10:33:43 mws Exp $
 #*********************************************************************
 use strict;
 use Test;
 
 BEGIN{
-	eval "use DBI; use ResourcePool::Factory::DBI;";
-	eval "use Net::LDAP; use ResourcePool::Factory::Net::LDAP;"
-}
+	eval "use DBI;";
+	eval "use Net::LDAP;"
+};
+BEGIN {	plan tests => 7;};
 
-BEGIN { plan tests => 7; };
+
+if (exists $INC{"DBI.pm"}) {
+	require ResourcePool::Factory::DBI;
+}
+if (exists $INC{"Net/LDAP.pm"}) {
+	require ResourcePool::Factory::Net::LDAP;
+}
 
 if (exists $INC{"DBI.pm"}) {
 my $f1 = ResourcePool::Factory::DBI->new("DataSource1", "user", "pass");

@@ -1,0 +1,57 @@
+=head1 NAME
+
+ResourcePool::Factory - A factory to create L<ResourcePool::Resource|Resource> objects
+
+=head1 SYNOPSIS
+
+
+ 
+ use ResourcePool::Factory;
+ 
+ my $factory = ResourcePool::Factory->new();
+
+=head1 DESCRIPTION
+
+
+This class acts as a base class for factories which are used together with the L<ResourcePool|ResourcePool>. The purpose of a ResourcePool::Factory derived class is to store all required data to construct a L<ResourcePool::Resource|Resource> derived object as required. In other words, the factory stores the arguments required for the constructor of the Resource and creates one when asked to do so.
+
+The L<ResourcePool|ResourcePool> takes a ResourcePool::Factory on construction and will use it to create the required resources as configured.
+
+=head2 S<ResourcePool::Factory-E<gt>new>
+
+The new method is called to create a new factory.
+
+Usually this method just stores the parameters somewhere and will use it later L<create_resource|> is called.
+
+
+=head2 S<$factory-E<gt>create_resource>
+
+This method is used to actually create a resource according to the parameters given to the new method.
+
+You must override this method in order to do something useful.
+
+B<Returns:> a reference to a ResourcePool::Resource object
+
+=head2 S<$factory-E<gt>info>
+
+This method is used for reporting purposes. It doesn't take any arguments and just returns some human readable string to identify the factory (and the related resource).
+
+You are not required to override this method, but its highly recommended for reporting purposes.
+
+B<Returns:> A human readable string describing the factory
+
+=head1 SEE ALSO
+
+L<ResourcePool|ResourcePool>,
+L<ResourcePool::Resource|Resource>,
+L<ResourcePool::Factory::DBI|Factory::DBI>,
+L<ResourcePool::Factory::Net::LDAP|Factory::LDAP>
+
+=head1 AUTHOR
+
+    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
+
+    This program is free software; you can redistribute it and/or
+    modify it under the same terms as Perl itself.
+
+		

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Factory.pm,v 1.16.2.1 2002/08/30 16:25:11 mws Exp $
+#*** $Id: Factory.pm,v 1.18 2002/09/02 10:22:58 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory;
@@ -12,7 +12,7 @@ use ResourcePool::Singleton;
 use ResourcePool::Resource;
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9907";
+$VERSION = "0.9908";
 
 sub new($$) {
 	my $proto = shift;
@@ -47,64 +47,3 @@ sub _my_very_private_and_secret_test_hook($) {
 }
 
 1;
-
-__END__
-
-=head1 NAME
-
-ResourcePool::Factory - A factory to create ResourcePool::Resource objects
-
-=head1 SYNOPSIS
-
- use ResourcePool::Factory;
-
- my $factory = ResourcePool::Factory->new();
-
-=head1 DESCRIPTION
-
-This package is not indented to be used directly. In fact it is a base class
-to derive your own classes to use with the ResourcePool.
-
-This factories are used in conjunction with the ResourcePool class.
-
-The purpose of such factories is to store the relevant data to create a
-resource in their private storage. Afterwards a resource can be created 
-without any further parameters.
-
-=head2 S<ResourcePool::Factory-E<gt>new>
-
-The new method is called to create a new factory.
-
-Usually this method just stores the parameters somewhere, blesses itself and 
-returnes the blessed reference.
-
-You must overload this method in order to do something useful.
-
-=head2 S<$pool-E<gt>create_resource>
-
-This method is used to actually create a resource according to the parameters
-given to the new() method.
-
-You must overload this method in order to do something useful.
-
-=head2 S<$pool-E<gt>info()>
-
-This method is sometimes used to report details about a failed resource.
-
-You must not overload this method, but its highly recommeded for reporting
-purposes.
-
-=head1 SEE ALSO
-
-L<ResourcePool(3pm)>, 
-L<ResourcePool::Resource(3pm)>, 
-L<ResourcePool::Factory::DBI(3pm)>,
-L<ResourcePool::Factory::Net::LDAP(3pm)>
-
-=head1 AUTHOR
-
-    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
-
-    This program is free software; you can redistribute it and/or
-    modify it under the same terms as Perl itself.
-
