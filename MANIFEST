@@ -1,0 +1,16 @@
+MANIFEST
+Changes
+README
+Makefile.PL
+lib/ResourcePool/Singleton.pm
+lib/ResourcePool.pm
+lib/ResourcePool/LoadBalancer.pm
+lib/ResourcePool/Resource/Net/LDAP.pm
+lib/ResourcePool/Resource/DBI.pm
+lib/ResourcePool/Factory/Net/LDAP.pm
+lib/ResourcePool/Factory/DBI.pm
+lib/ResourcePool/Factory.pm
+lib/ResourcePool/Resource.pm
+t/01Singleton.t
+t/02FactorySingleton.t
+t/03ResourcePoolSingleton.t

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LoadBalancer.pm,v 1.10 2002/06/02 18:11:35 mws Exp $
+#*** $Id: LoadBalancer.pm,v 1.16 2002/07/05 15:14:03 mws Exp $
 #*********************************************************************
 
 ######
@@ -14,10 +14,10 @@ package ResourcePool::LoadBalancer;
 
 use strict;
 use vars qw($VERSION @ISA);
-use ResourcePool::Singelton;
+use ResourcePool::Singleton;
 
-push @ISA, "ResourcePool::Singelton";
-$VERSION = "0.9904";
+push @ISA, "ResourcePool::Singleton";
+$VERSION = "0.9905";
 
 sub new($$@) {
 	my $proto = shift;
@@ -25,7 +25,7 @@ sub new($$@) {
 	my $key = shift;
 	my $self;
 
-	$self = $class->SUPER::new("LoadBalancer". $key); # Singelton
+	$self = $class->SUPER::new("LoadBalancer". $key); # Singleton
 
 	if (! exists($self->{Policy})) {
 		$self->{key} = $key;
@@ -148,7 +148,6 @@ sub get_least($) {
 	my ($self) = @_;
 	my ($rec, $pool);
 	my ($least_val, $least_r_pool);
-	my ($least_usage, $least_usage_r_pool);
 	my $r_pool;
 	my $val;
 
@@ -217,29 +216,38 @@ sub get_fallback($) {
 
 sub free($$) {
 	my ($self, $rec) = @_;
-	my $r_pool;
+	my $r_pool = $self->{UsedPool}->{$rec};	
 
- 	$r_pool = $self->{UsedPool}->{$rec};	
-	$r_pool->{pool}->free($rec);
-	if ($self->chk_suspend_no_recover($r_pool)) {
-		$r_pool->{pool}->downsize();
-	}
-	if ($self->{Policy} eq "FALLBACK") {
-		if ($r_pool ne $self->{LastUsedPool}) {
-			$self->{LastUsedPool}->{pool}->downsize();
+	if (defined $r_pool) {
+		$r_pool->{pool}->free($rec);
+		if ($self->chk_suspend_no_recover($r_pool)) {
+			$r_pool->{pool}->downsize();
 		}
+		if ($self->{Policy} eq "FALLBACK") {
+			if ($r_pool ne $self->{LastUsedPool}) {
+				$self->{LastUsedPool}->{pool}->downsize();
+			}
+		}
+		undef $self->{UsedPool}->{$rec};
+		return 1;
+	} else {
+		return 0;
 	}
-	undef $self->{UsedPool}->{$rec};
 }
 
 sub fail($$) {
 	my ($self, $rec) = @_;
 	my $r_pool = $self->{UsedPool}->{$rec};
 
- 	$r_pool->{pool}->fail($rec);	
-	undef $self->{UsedPool}->{$rec};
-	if (! $self->chk_suspend($r_pool)) {
-		$self->suspend($r_pool);
+	if (defined $r_pool) {
+	 	$r_pool->{pool}->fail($rec);	
+		undef $self->{UsedPool}->{$rec};
+		if (! $self->chk_suspend($r_pool)) {
+			$self->suspend($r_pool);
+		}
+		return 1;
+	} else {
+		return 0;
 	}
 }
 
@@ -304,7 +312,7 @@ sub chk_suspend($$) {
 	if ($self->chk_suspend_no_recover($r_pool)) {
 		if ($r_pool->{Suspended} <= time()) {
 			$self->{StatSuspend}--;
-			$r_pool->{StatSuspendTime} += $r_pool->{Suspended};
+			$r_pool->{StatSuspendTime} += $r_pool->{SuspendTimeout};
 			$r_pool->{StatSuspendTime} += time() - $r_pool->{Suspended};
 
 			$r_pool->{UsageCount} = $self->get_avg_usagecount();
@@ -404,7 +412,7 @@ construction (which is hopefully kept at a central point in your program).
 =head2 S<LoadBalancer-E<gt>new($key, [@Options])>
 
 Creates a new LoadBalancer. This method takes one key to identify the 
-LoadBalancer (used by ResourcePool::Singelton). It is recommended to use
+LoadBalancer (used by ResourcePool::Singleton). It is recommended to use
 some meaningful string as key, since this is used when errors are reported.
 This key is internally used to distingush between different pool types, e.g.
 if you have two LoadBalancer one for DBI connections to different servers and
@@ -469,7 +477,7 @@ ResourcePool returns a undef, see below.
 
 You can add as many ResourcePools as you want.
 
-Defaults: Weight = 100, SuspendTimout = 5
+Defaults: Weight = 100, SuspendTimeout = 5
 
 =head2 S<$loadbalancer-E<gt>get>
 
@@ -492,13 +500,17 @@ the time which get() blocks before it returns undef.
 
 =head2 S<$loadbalancer-E<gt>free($resource)>
 
-Returns a resource to the ResourcePool it comes from. Basically the same
+Marks a resource as free. Basically the same
 as the free() method of the ResourcePool.
+Return value is 1 on success or 0 if the resource doesn't belong to 
+one of the underlieing pools.
 
 =head2 S<$loadbalancer-E<gt>fail($resource)>
 
 Maks the resource as bad. Basically the same as the fail() method of the
 ResourcePool.
+Return value is 1 on success or 0 if the resource doesn't belong to 
+one of the underlieing pools.
 
 =head1 EXAMPLE
 

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory::Net::LDAP
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.9 2002/06/02 18:11:46 mws Exp $
+#*** $Id: LDAP.pm,v 1.12 2002/07/01 21:49:53 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory::Net::LDAP;
@@ -9,11 +9,10 @@ use strict;
 use vars qw($VERSION @ISA);
 use ResourcePool::Factory;
 use ResourcePool::Resource::Net::LDAP;
-use Net::LDAP;
 use Data::Dumper;
 
 push @ISA, "ResourcePool::Factory";
-$VERSION = "0.9904";
+$VERSION = "0.9905";
 
 sub new($$@) {
         my ($proto) = shift;
@@ -23,7 +22,7 @@ sub new($$@) {
 	my $d = Data::Dumper->new([@_]);
 	$d->Indent(0);
 	$key = $d->Dump();
-	$self = $class->SUPER::new("Net::LDAP".$key);	# parent uses Singelton
+	$self = $class->SUPER::new("Net::LDAP".$key);	# parent uses Singleton
 
 	if (! exists($self->{host})) {
         	$self->{host} = shift;

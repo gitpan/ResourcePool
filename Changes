@@ -1,0 +1,21 @@
+Changelog for ResourcePool
+
+V0.9905 - 2002-07-05
+
+    * A rollback() is performed on DBI sessions with AutoCommit disabled
+      when they are free()ed.
+    * free() and fail() for ResourcePool and LoadBalancer return meaningful 
+      values.
+    * added tests
+
+V0.9904 - 2002-06-04
+
+    * Implemented the SleepOnFail option for ResourcePool and LoadBalancer.
+    * Fixed typo in Net::LDAP bindings which caused incomplete error reporting 
+      (thx to Sean Welsh)
+    * Fixed many typo's in the documentation (thx to Florian Helmberger)
+    * Greatly improved and extended the documentation.
+
+V0.9903 - 2002-10-15
+
+    * First public release

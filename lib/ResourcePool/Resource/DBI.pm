@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource::DBI
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: DBI.pm,v 1.8 2002/01/20 16:32:47 mws Exp $
+#*** $Id: DBI.pm,v 1.12 2002/07/03 19:25:36 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource::DBI;
@@ -11,26 +11,26 @@ use strict;
 use DBI;
 use ResourcePool::Resource;
 
-$VERSION = "0.9904";
+$VERSION = "0.9905";
 push @ISA, "ResourcePool::Resource";
 
 sub new($$$$$) {
-        my $proto = shift;
-        my $class = ref($proto) || $proto;
-        my $self = {};
-        my $ds   = shift;
-        my $user = shift;
-        my $auth = shift;
-        my $attr = shift;
+	my $proto = shift;
+	my $class = ref($proto) || $proto;
+	my $self = {};
+	my $ds   = shift;
+	my $user = shift;
+	my $auth = shift;
+	my $attr = shift;
 
 	$self->{dbh} = DBI->connect($ds, $user, $auth, $attr);
 	if (! defined $self->{dbh}) {
 		warn "ResourcePool::Resource::DBI: Connect to '$ds' failed: $DBI::errstr\n";
 		return undef;
 	}
-        bless($self, $class);
+	bless($self, $class);
 
-        return $self;
+	return $self;
 }
 
 sub close($) {
@@ -46,6 +46,15 @@ sub precheck($) {
 		$self->close();
 	}
 	return $rc;
+}
+
+sub postcheck($) {
+	my ($self) = @_;
+
+	if (! $self->{dbh}->{AutoCommit}) {
+		$self->{dbh}->rollback();
+	}
+	return 1;
 }
 
 sub get_plain_resource($) {
@@ -67,6 +76,16 @@ __END__
 
 ResourcePool::Resource::DBI - A ResourcePool wrapper for DBI
 
+=head1 SYNOPSIS
+
+ use ResourcePool::Resource::DBI;
+
+ my $resource =  ResourcePool::Resource::DBI->new(
+                        $data_source, 
+                        $username, 
+                        $auth, 
+                        \%attr);
+
 =head1 DESCRIPTION
 
 This class is used by the ResourcePool internally to create DBI connections.
@@ -86,7 +105,8 @@ Returns true on success and false on fail.
 
 =item postcheck()
 
-Does not implement any postcheck().
+Always returns true, but does a rollback() on the session 
+(if AutoCommit is off).
 
 =head1 SEE ALSO
 

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource::Net::LDAP
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.8 2002/01/20 16:32:47 mws Exp $
+#*** $Id: LDAP.pm,v 1.10 2002/07/03 19:25:36 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource::Net::LDAP;
@@ -13,7 +13,7 @@ use Net::LDAP::Constant qw(:all);
 use ResourcePool::Resource;
 use Data::Dumper;
 
-$VERSION = "0.9904";
+$VERSION = "0.9905";
 push @ISA, "ResourcePool::Resource";
 
 sub new($$$@) {
@@ -114,6 +114,16 @@ sub swarn($@) {
 =head1 NAME
 
 ResourcePool::Resource::Net::LDAP - A ResourcePool wrapper for Net::LDAP
+
+=head1 SYNOPSIS
+
+ use ResourcePool::Resource::Net::LDAP;
+
+ my $resource = ResourcePool::Resource::Net::LDAP->new(
+                   $factory,
+                   $hostname, 
+                   [@NamedBindOptions],
+                   [@NamedNewOptions]);
 
 =head1 DESCRIPTION
 

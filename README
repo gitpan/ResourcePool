@@ -1,0 +1,35 @@
+ResourcePool - A connection caching and pooling framework
+
+Copyright (c) 2001-2002 by Markus Winand <mws@fatalmind.com>
+
+See COPYRIGHT section in the ResourcePool(3pm) manpage.
+
+Recent Changes
+--------------
+    When using DBI connections without AutoCommit, ResourcePool
+    performs a rollback on the session if it's returned to the
+    pool.
+
+Installation
+------------
+    ResourcePool is a pure perl implemented module and should 
+    therfore run everywhere where perl is already installed.
+
+    The well known procedure is.
+        perl Makefile.PL
+        make
+        make test
+        make install 
+
+Examples
+--------
+    Are included in the manpages which come with this distribution.
+    The ResourcePool(3pm) manpage is the right point to start, 
+    after this you should dirctly go to the 
+    ResourcePool::LoadBalancer(3pm) to feel the power.
+
+
+More information
+----------------
+    Can be found at the ResourcePool homepage
+       http://www.fatalmind.com/projects/ResourcePool/

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: ResourcePool.pm,v 1.23 2002/06/03 19:16:00 mws Exp $
+#*** $Id: ResourcePool.pm,v 1.29 2002/07/05 15:14:02 mws Exp $
 #*********************************************************************
 
 ######
@@ -17,15 +17,15 @@ package ResourcePool;
 
 use strict;
 use vars qw($VERSION @ISA);
-use ResourcePool::Singelton;
+use ResourcePool::Singleton;
 BEGIN { 
 	# make script using Time::HiRes, but not fail if it isn't there
 	eval "use Time::HiRes qw(sleep)";
 }
 
 
-push @ISA, "ResourcePool::Singelton";
-$VERSION = "0.9904";
+push @ISA, "ResourcePool::Singleton";
+$VERSION = "0.9905";
  
 sub new($$@) {
 	my $proto = shift;
@@ -33,7 +33,7 @@ sub new($$@) {
 	my $factory = shift;
 	my $self;
 	my $i;
-	$self = $class->SUPER::new("ResourcePool::".$factory); # Singelton
+	$self = $class->SUPER::new("ResourcePool::".$factory); # Singleton
 
 	if (!exists($self->{Factory})) {
 		$self->{Factory} = $factory;
@@ -110,8 +110,10 @@ sub free($$) {
 		} else {
 			$rec->fail_close();
 		}
+		return 1;
+	} else {
+		return 0;
 	}
-	return undef;
 }
 
 sub fail($$) {
@@ -121,8 +123,10 @@ sub fail($$) {
 		$self->{Factory}->info());
 	if (drop_from_list($rec, $self->{UsedPool})) {
 		$rec->fail_close();
+		return 1;
+	} else {
+		return 0;
 	}
-	return undef;
 }
 
 sub downsize($) {
@@ -297,7 +301,7 @@ possible. So if you call the new method with the same arguments twice,
 the second call returns the same reference as the first did.
 This is even true if you call the new method while handling different 
 Apache/mod_perl requests (as long as they are in the same Apache process). 
-(This is implemented using the Singelton class included in this distribution)
+(This is implemented using the Singleton class included in this distribution)
 
 =over 4
 
@@ -398,14 +402,16 @@ The get() method may return undef if there is no valid resource available.
 
 =head2 S<$pool-E<gt>free($resource)>
 
-Returns a resource to the pool. This resource will be re-used by get() calls.
+Marks a resource as free. This resource will be re-used by get() calls.
 The free() method calls the postcheck() method of the Resource to dertermine if
-the resource is valid.
+the resource is valid. 
+Return value is 1 on success or 0 if the resource doesn't belong to that pool.
 
 =head2 S<$pool-E<gt>fail($resource)>
 
 Marks a resource as bad. The ResourcePool will throw this resource away and
 NOT return it to the pool of available connections.
+Return value is 1 on success or 0 if the resource doesn't belong to that pool.
 
 =head1 EXAMPLE
 

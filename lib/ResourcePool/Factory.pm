@@ -1,18 +1,18 @@
 #*********************************************************************
 #*** ResourcePool::Factory
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Factory.pm,v 1.11 2002/06/02 18:11:46 mws Exp $
+#*** $Id: Factory.pm,v 1.13 2002/06/23 21:15:02 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory;
 
 use strict;
 use vars qw($VERSION @ISA);
-use ResourcePool::Singelton;
+use ResourcePool::Singleton;
 use ResourcePool::Resource;
 
-push @ISA, "ResourcePool::Singelton";
-$VERSION = "0.9904";
+push @ISA, "ResourcePool::Singleton";
+$VERSION = "0.9905";
 
 sub new($$) {
         my $proto = shift;
@@ -20,7 +20,7 @@ sub new($$) {
 	my $key = shift;
         my $self;
 
-	$self = $class->SUPER::new("ResourcePool::Factory::".  $key);#Singelton
+	$self = $class->SUPER::new("ResourcePool::Factory::".  $key);#Singleton
 	if (! exists($self->{Used})) {
 		$self->{Used} = 1;
 	}

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Resource.pm,v 1.10 2002/06/02 18:11:46 mws Exp $
+#*** $Id: Resource.pm,v 1.12 2002/07/03 19:25:36 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource;
@@ -9,7 +9,7 @@ package ResourcePool::Resource;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "0.9904";
+$VERSION = "0.9905";
 
 sub new($) {
         my $proto = shift;
@@ -55,6 +55,12 @@ __END__
 =head1 NAME
  
 ResourcePool::Resource - A wrapper class for a resource
+
+=head1 SYNOPSIS
+
+ use ResourcePool::Resource;
+
+ my $resource = ResourcePool::Resource->new();
 
 =head1 DESCRIPTION
 
