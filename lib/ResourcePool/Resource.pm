@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource
-#*** Copyright (c) 2001 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Resource.pm,v 1.7 2001/10/07 18:32:55 mws Exp $
+#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
+#*** $Id: Resource.pm,v 1.10 2002/06/02 18:11:46 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource;
@@ -9,7 +9,7 @@ package ResourcePool::Resource;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "0.9903";
+$VERSION = "0.9904";
 
 sub new($) {
         my $proto = shift;
@@ -54,7 +54,7 @@ __END__
 
 =head1 NAME
  
-ResourcePool::Resource - A wraper class for a resource
+ResourcePool::Resource - A wrapper class for a resource
 
 =head1 DESCRIPTION
 
@@ -63,23 +63,24 @@ It's thougt to be an abstract base class for further resources which will be
 used with the ResourcePool.
 
 This classes gets constructed by a Factory like ResourcePool::Factory.
-The factory knows about the actual parameters to pass to the Resource. So in fact a
-Factory doens't create the resource like DBI , it creates a wrapper Resource for it
-which also supports some test functionality.
+The factory knows about the actual parameters to pass to the Resource. 
+So in fact a Factory doens't create the resource like DBI, 
+it creates a wrapper Resource for it which also supports some test 
+functionality.
 
-Every from ResourcePool::Resource derived class must 
+Every class which is derived from  ResourcePool::Resource must 
 overload this member functions:
 
-=head2 $self->close()
+=head2 S<$self-E<gt>close>
 
 Closes a connection gracefully.
 
-=head2 $self->fail_close()
+=head2 S<$self-E<gt>fail_close>
 
 Closes a failed connection and ignores error (since this connection is known 
 as bad)
 
-=head2 $self->get_plain_resource
+=head2 S<$self-E<gt>get_plain_resource>
 
 Returns the nacked resource which can be used by the client. This an the DBI or
 Net::LDAP handle for example.
@@ -88,13 +89,13 @@ Net::LDAP handle for example.
 Additonally a ResourcePool::Resource derived class should overload at least
 one of the check methods:
 
-=head2 $self->precheck()
+=head2 S<$self-E<gt>precheck>
 
 Checks a connection. This method is called by the get() method of the 
 ResourcePool before it returns a connection. 
 The default implementation always returns true.
 
-=head2 $self->postcheck()
+=head2 S<$self-E<gt>postcheck>
 
 Checks a connection. This method is called by the free() method of the
 ResourcePool to check if a connection is still valid. 
@@ -107,7 +108,7 @@ ResourcePool::Resource::DBI(3pm), ResourcePool::Resource::Net::LDAP(3pm)
 
 =head1 AUTHOR
 
-    Copyright (C) 2001 by Markus Winand <mws@fatalmind.com>
+    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the same terms as Perl itself.

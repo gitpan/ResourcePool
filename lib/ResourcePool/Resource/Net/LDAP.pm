@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource::Net::LDAP
-#*** Copyright (c) 2001 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.5 2001/08/19 09:39:43 mws Exp $
+#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
+#*** $Id: LDAP.pm,v 1.8 2002/01/20 16:32:47 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource::Net::LDAP;
@@ -13,7 +13,7 @@ use Net::LDAP::Constant qw(:all);
 use ResourcePool::Resource;
 use Data::Dumper;
 
-$VERSION = "0.9903";
+$VERSION = "0.9904";
 push @ISA, "ResourcePool::Resource";
 
 sub new($$$@) {
@@ -89,7 +89,7 @@ sub bind($) {
 			swarn("ResourcePool::Resource::Net::LDAP: ".
 				"Bind as '%s' to '%s' failed: %s\n",
 				$BindOptions{dn},
-				$self->{Factroy}->info(),
+				$self->{Factory}->info(),
 				$rc->error());
 		} else {
 			swarn("ResourcePool::Resource::Net::LDAP: ".
@@ -110,3 +110,42 @@ sub swarn($@) {
 	warn sprintf($fmt, @_);
 }
 1;
+
+=head1 NAME
+
+ResourcePool::Resource::Net::LDAP - A ResourcePool wrapper for Net::LDAP
+
+=head1 DESCRIPTION
+
+This class is used by the ResourcePool internally to create Net::LDAP 
+connections.
+It's called by the corresponding ResourcePool::Factory::Net::LDAP object 
+which passes the parameters needed to establish the Net::LDAP connection.
+
+The only thing which has to been known by an application developer about this
+class is the implementation of the precheck() and postcheck() methods:
+
+=over 4
+
+=item precheck()
+
+Performs a bind(), either anonymous or with dn and password (depends on the
+arguments to ResourcePool::Factory::Net::LDAP). 
+
+Returns true on success and false if the bind failed (regardless of the reason).
+
+=item postcheck()
+
+Does not implement any postcheck().
+
+=head1 SEE ALSO
+
+ResourcePool(3pm), ResourcePool::Resource(3pm)
+
+=head1 AUTHOR
+
+    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
+
+    This program is free software; you can redistribute it and/or
+    modify it under the same terms as Perl itself.
+

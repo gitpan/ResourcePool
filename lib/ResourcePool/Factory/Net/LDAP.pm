@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory::Net::LDAP
-#*** Copyright (c) 2001 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.6 2001/08/19 09:39:43 mws Exp $
+#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
+#*** $Id: LDAP.pm,v 1.9 2002/06/02 18:11:46 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory::Net::LDAP;
@@ -13,7 +13,7 @@ use Net::LDAP;
 use Data::Dumper;
 
 push @ISA, "ResourcePool::Factory";
-$VERSION = "0.9903";
+$VERSION = "0.9904";
 
 sub new($$@) {
         my ($proto) = shift;
@@ -76,14 +76,14 @@ ResourcePool class.
 Please read the ResourcePool::Factory(3pm) manpage about the purpos of such
 a factory.
 
-=head2 ResourcePool::Factory::Net::LDAP->new
+=head2 S<ResourcePool::Factory::Net::LDAP-E<gt>new>
 
 =over 4
 
 =item $hostname
 
 The hostname of the LDAP server. Please note: The portnumber (if not 389)
-has to go to the [@New] option, see below.
+has to go to the [@NamedNewOptions] option, see below.
 
 =item [@NamedBindOptions]
 
@@ -124,13 +124,17 @@ To connect to the same server but to the port 10000 and bind anonymously:
                      [port => 10000]
    );
 
+NOTE: This class does not actually connect to the LDAP server, it only stores
+the credential, the actual connection is done with the 
+$factory->create_resource() method wich is invoked from the ResourcePool.
+
 =head1 SEE ALSO
 
-ResourcePool(3pm), ResourcePool::Factory(3pm), ResourcePool::Factory::DBI(3pm)
+Net::LDAP(3pm), ResourcePool(3pm), ResourcePool::Factory(3pm), ResourcePool::Factory::DBI(3pm)
 
 =head1 AUTHOR
 
-    Copyright (C) 2001 by Markus Winand <mws@fatalmind.com>
+    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the same terms as Perl itself.

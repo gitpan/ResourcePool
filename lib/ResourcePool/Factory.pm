@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory
-#*** Copyright (c) 2001 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Factory.pm,v 1.7 2001/08/19 09:39:43 mws Exp $
+#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
+#*** $Id: Factory.pm,v 1.11 2002/06/02 18:11:46 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory;
@@ -12,7 +12,7 @@ use ResourcePool::Singelton;
 use ResourcePool::Resource;
 
 push @ISA, "ResourcePool::Singelton";
-$VERSION = "0.9903";
+$VERSION = "0.9904";
 
 sub new($$) {
         my $proto = shift;
@@ -51,7 +51,7 @@ ResourcePool::Factory - A factory to create ResourcePool::Resource objects
 
  use ResourcePool::Factory;
 
- my $factory = ResourcePool->new();
+ my $factory = ResourcePool::Factory->new();
 
 =head1 DESCRIPTION
 
@@ -64,27 +64,28 @@ The purpose of such factories is to store the relevant data to create a
 resource in their private storage. Afterwards a resource can be created 
 without any further parameters.
 
-=head2 ResourcePool::Factory->new()
+=head2 S<ResourcePool::Factory-E<gt>new>
 
 The new method is called to create a new factory.
 
 Usually this method just stores the parameters somewhere, blesses itself and 
 returnes the blessed reference.
 
-You must overload this method in order to do something usefull.
+You must overload this method in order to do something useful.
 
-=head2 $pool->create_resource()
+=head2 S<$pool-E<gt>create_resource>
 
 This method is used to actually create a resource according to the parameters
 given to the new() method.
 
-You must overload this method in order to do something usefull.
+You must overload this method in order to do something useful.
 
-=head2 $pool->info()
+=head2 S<$pool-E<gt>info()>
 
 This method is sometimes used to report details about a failed resource.
 
-You must not overload this method.
+You must not overload this method, but its highly recommeded for reporting
+purposes.
 
 =head1 SEE ALSO
 
@@ -93,7 +94,7 @@ ResourcePool::Factory::Net::LDAP(3pm)
 
 =head1 AUTHOR
 
-    Copyright (C) 2001 by Markus Winand <mws@fatalmind.com>
+    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the same terms as Perl itself.
