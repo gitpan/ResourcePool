@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool
-#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: ResourcePool.pm,v 1.49.2.3 2003/05/07 19:40:11 mws Exp $
+#*** Copyright (c) 2002-2005 by Markus Winand <mws@fatalmind.com>
+#*** $Id: ResourcePool.pm,v 1.49.2.4 2005/01/05 19:42:49 mws Exp $
 #*********************************************************************
 
 ######
@@ -16,6 +16,7 @@ package ResourcePool;
 
 use strict;
 use vars qw($VERSION @ISA);
+use Tie::RefHash;
 use ResourcePool::Singleton;
 use ResourcePool::Command::Execute;
 
@@ -26,7 +27,7 @@ BEGIN {
 
 
 push @ISA, ("ResourcePool::Command::Execute", "ResourcePool::Singleton");
-$VERSION = "1.0103";
+$VERSION = "1.0104";
  
 sub new($$@) {
 	my $proto = shift;
@@ -37,7 +38,7 @@ sub new($$@) {
 	if (!exists($self->{Factory})) {
 		$self->{Factory} = $factory;
 		$self->{FreePool} = [];
-		$self->{UsedPool} = {};
+		tie %{ $self->{UsedPool} }, 'Tie::RefHash';
 		$self->{FreePoolSize} = 0;
 		$self->{UsedPoolSize} = 0;
 		my %options = (

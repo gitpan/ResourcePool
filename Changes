@@ -1,5 +1,10 @@
 Changelog for ResourcePool
 
+V1.0104 - 2003-05-07
+
+  *  ResourcePool did use a stringified object as key in a hash 
+     reference. This has been replaced by using Tie::RefHash. 
+
 V1.0103 - 2003-05-07
 
   *  Applied a patch from Chad Redman which is basically the same as 

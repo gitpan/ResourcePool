@@ -1,8 +1,8 @@
 #! /usr/bin/perl -w
 #*********************************************************************
 #*** t/20LBOptions.t
-#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 20LBOptions.t,v 1.1.4.1 2003/03/27 20:18:40 mws Exp $
+#*** Copyright (c) 2002-2005 by Markus Winand <mws@fatalmind.com>
+#*** $Id: 20LBOptions.t,v 1.1.4.2 2005/01/05 19:43:36 mws Exp $
 #*********************************************************************
 use strict;
 

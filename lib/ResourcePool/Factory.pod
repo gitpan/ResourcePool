@@ -71,7 +71,7 @@ L<ResourcePool::Factory::Net::LDAP|ResourcePool::Factory::Net::LDAP>
 
 =head1 AUTHOR
 
-    Copyright (C) 2001-2003 by Markus Winand <mws@fatalmind.com>
+    Copyright (C) 2001-2005 by Markus Winand <mws@fatalmind.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the same terms as Perl itself.

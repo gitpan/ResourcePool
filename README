@@ -1,17 +1,13 @@
 ResourcePool - A connection caching and pooling framework
 
-Copyright (c) 2001-2003 by Markus Winand <mws@fatalmind.com>
+Copyright (c) 2001-2005 by Markus Winand <mws@fatalmind.com>
 
 See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
 Recent Changes
 --------------
-  *  Applied a patch from Chad Redman which is basically the same as 
-     the patch from Eric Parusel which was partitially applied to 
-     1.0102. This time I applied the patch to the correct CVS branch 
-     *argl*. 
-
-  *  Minor corrections and improvements in documentation. 
+  *  ResourcePool did use a stringified object as key in a hash 
+     reference. This has been replaced by using Tie::RefHash. 
 
 Installation
 ------------
@@ -43,9 +39,10 @@ Resource bindings
     ResourcePool::ExtensionGuide(3pm) manpage for details how to 
     create one.
 
-    Available bindings on CPAN (as of 2003-02-27):
+    Available bindings on CPAN (as of 2005-01-05):
        Net::LDAP
        DBI
+       Alzabo
        SOAP::Lite
 
     The Net::LDAP and DBI bindings where included in the ResourcePool
@@ -63,3 +60,4 @@ Authors contact
        e-mail: mws@fatalmind.com
      homepage: http://www.fatalmind.com/
     whishlist: http://www.amazon.de/exec/obidos/wishlist/1JW6LC92SAK62/
+               http://amazon.com/gp/registry/3BXRJP9W3WMDX

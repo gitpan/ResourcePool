@@ -1,14 +1,14 @@
 #*********************************************************************
 #*** ResourcePool::Command::Exception
-#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Exception.pm,v 1.2.2.2 2003/05/07 19:40:12 mws Exp $
+#*** Copyright (c) 2002-2005 by Markus Winand <mws@fatalmind.com>
+#*** $Id: Exception.pm,v 1.2.2.3 2005/01/05 19:43:35 mws Exp $
 #*********************************************************************
 package ResourcePool::Command::Exception;
 
 use vars qw($VERSION);
 #use overload ('""' => 'stringify');
 
-$VERSION = "1.0103";
+$VERSION = "1.0104";
 
 sub new($$$$) {
 	my $proto = shift;
