@@ -6,9 +6,8 @@ See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
 Recent Changes
 --------------
-    When using DBI connections without AutoCommit, ResourcePool
-    performs a rollback on the session if it's returned to the
-    pool.
+    * wrapped DBI calls into eval{} blocks to make RaiseError aware.
+    * added tests
 
 Installation
 ------------

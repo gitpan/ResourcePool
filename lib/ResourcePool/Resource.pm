@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Resource.pm,v 1.12 2002/07/03 19:25:36 mws Exp $
+#*** $Id: Resource.pm,v 1.15 2002/07/10 17:27:44 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource;
@@ -9,13 +9,14 @@ package ResourcePool::Resource;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "0.9905";
+$VERSION = "0.9906";
 
-sub new($) {
+sub new($@) {
         my $proto = shift;
         my $class = ref($proto) || $proto;
         my $self = {};
-	$self->{PlainResource} = {};
+	$self->{PlainResource} = {shift => $self};
+	$self->{VALID} = 1;
 
         bless($self, $class);
 
@@ -35,12 +36,12 @@ sub fail_close($) {
 
 sub precheck($) {
 	my ($self) = @_;
-	return 1;
+	return $self->{VALID};
 }
 
 sub postcheck($) {
 	my ($self) = @_;
-	return 1;
+	return $self->{VALID};
 }
 
 sub get_plain_resource($) {
@@ -48,12 +49,17 @@ sub get_plain_resource($) {
 	return $self->{PlainResource};
 }
 
+sub _my_very_private_and_secret_test_hook($$) {
+	my ($self, $valid) = $_;
+	$self->{VALID} = $valid;
+}
+
 1;
 
 __END__
 
 =head1 NAME
- 
+
 ResourcePool::Resource - A wrapper class for a resource
 
 =head1 SYNOPSIS
@@ -109,8 +115,9 @@ The default implementation always returns true.
  
 =head1 SEE ALSO
 
-ResourcePool(3pm), 
-ResourcePool::Resource::DBI(3pm), ResourcePool::Resource::Net::LDAP(3pm)
+L<ResourcePool(3pm)>, 
+L<ResourcePool::Resource::DBI(3pm)>, 
+L<ResourcePool::Resource::Net::LDAP(3pm)>
 
 =head1 AUTHOR
 

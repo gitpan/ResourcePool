@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource::DBI
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: DBI.pm,v 1.12 2002/07/03 19:25:36 mws Exp $
+#*** $Id: DBI.pm,v 1.15 2002/07/10 17:27:44 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource::DBI;
@@ -11,7 +11,7 @@ use strict;
 use DBI;
 use ResourcePool::Resource;
 
-$VERSION = "0.9905";
+$VERSION = "0.9906";
 push @ISA, "ResourcePool::Resource";
 
 sub new($$$$$) {
@@ -23,7 +23,9 @@ sub new($$$$$) {
 	my $auth = shift;
 	my $attr = shift;
 
-	$self->{dbh} = DBI->connect($ds, $user, $auth, $attr);
+	eval {
+		$self->{dbh} = DBI->connect($ds, $user, $auth, $attr);
+	}; 
 	if (! defined $self->{dbh}) {
 		warn "ResourcePool::Resource::DBI: Connect to '$ds' failed: $DBI::errstr\n";
 		return undef;
@@ -35,7 +37,9 @@ sub new($$$$$) {
 
 sub close($) {
 	my ($self) = @_;
-	$self->{dbh}->disconnect();
+	eval {
+		$self->{dbh}->disconnect();
+	};
 }
 
 sub precheck($) {
@@ -43,7 +47,9 @@ sub precheck($) {
 	my $rc = $self->{dbh}->ping();
 
 	if (!$rc) {
-		$self->close();
+		eval {
+			$self->close();
+		};
 	}
 	return $rc;
 }
@@ -52,7 +58,9 @@ sub postcheck($) {
 	my ($self) = @_;
 
 	if (! $self->{dbh}->{AutoCommit}) {
-		$self->{dbh}->rollback();
+		eval {
+			$self->{dbh}->rollback();
+		};
 	}
 	return 1;
 }
@@ -110,7 +118,8 @@ Always returns true, but does a rollback() on the session
 
 =head1 SEE ALSO
 
-ResourcePool(3pm), ResourcePool::Resource(3pm)
+L<ResourcePool(3pm)>, 
+L<ResourcePool::Resource(3pm)>
 
 =head1 AUTHOR
 

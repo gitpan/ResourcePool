@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Singleton.pm
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Singleton.pm,v 1.2 2002/06/23 21:15:02 mws Exp $
+#*** $Id: Singleton.pm,v 1.3 2002/07/06 09:36:29 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Singleton;
@@ -9,7 +9,7 @@ package ResourcePool::Singleton;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "0.9905";
+$VERSION = "0.9906";
 
 BEGIN {
 	my $key_hash = {};

@@ -2,8 +2,9 @@ MANIFEST
 Changes
 README
 Makefile.PL
-lib/ResourcePool/Singleton.pm
 lib/ResourcePool.pm
+lib/ResourcePool.pod
+lib/ResourcePool/Singleton.pm
 lib/ResourcePool/LoadBalancer.pm
 lib/ResourcePool/Resource/Net/LDAP.pm
 lib/ResourcePool/Resource/DBI.pm
@@ -14,3 +15,7 @@ lib/ResourcePool/Resource.pm
 t/01Singleton.t
 t/02FactorySingleton.t
 t/03ResourcePoolSingleton.t
+t/04LBSingleton.t
+t/10PoolOptions.t
+t/30DBI.t
+t/40LDAP.t

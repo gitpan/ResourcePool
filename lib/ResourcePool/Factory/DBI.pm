@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory::DBI
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: DBI.pm,v 1.13 2002/07/01 21:49:53 mws Exp $
+#*** $Id: DBI.pm,v 1.15 2002/07/10 17:27:44 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory::DBI;
@@ -12,7 +12,7 @@ use ResourcePool::Resource::DBI;
 use ResourcePool::Factory;
 use Data::Dumper;
 
-$VERSION = "0.9905";
+$VERSION = "0.9906";
 push @ISA, "ResourcePool::Factory";
 
 sub new($$$$$) {
@@ -78,7 +78,10 @@ Takes the same arguments as the connect method of the DBI perl module.
 
 =head1 SEE ALSO
 
-DBI(3pm), ResourcePool(3pm), ResourcePool::Factory(3pm), ResourcePool::Factory::Net::LDAP(3pm)
+L<DBI(3pm)>, 
+L<ResourcePool(3pm)>, 
+L<ResourcePool::Factory(3pm)>, 
+L<ResourcePool::Factory::Net::LDAP(3pm)>
 
 =head1 AUTHOR
 

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource::Net::LDAP
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.10 2002/07/03 19:25:36 mws Exp $
+#*** $Id: LDAP.pm,v 1.12 2002/07/10 17:27:44 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource::Net::LDAP;
@@ -13,7 +13,7 @@ use Net::LDAP::Constant qw(:all);
 use ResourcePool::Resource;
 use Data::Dumper;
 
-$VERSION = "0.9905";
+$VERSION = "0.9906";
 push @ISA, "ResourcePool::Resource";
 
 sub new($$$@) {
@@ -150,7 +150,8 @@ Does not implement any postcheck().
 
 =head1 SEE ALSO
 
-ResourcePool(3pm), ResourcePool::Resource(3pm)
+L<ResourcePool(3pm)>, 
+L<ResourcePool::Resource(3pm)>
 
 =head1 AUTHOR
 

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Factory.pm,v 1.13 2002/06/23 21:15:02 mws Exp $
+#*** $Id: Factory.pm,v 1.16 2002/07/10 17:27:44 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory;
@@ -12,31 +12,38 @@ use ResourcePool::Singleton;
 use ResourcePool::Resource;
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9905";
+$VERSION = "0.9906";
 
 sub new($$) {
-        my $proto = shift;
-        my $class = ref($proto) || $proto;
+	my $proto = shift;
+	my $class = ref($proto) || $proto;
 	my $key = shift;
-        my $self;
+	my $self;
 
 	$self = $class->SUPER::new("ResourcePool::Factory::".  $key);#Singleton
 	if (! exists($self->{Used})) {
-		$self->{Used} = 1;
+		$self->{Used} = 0;
 	}
 
-        bless($self, $class);
+	bless($self, $class);
 
-        return $self;
+	return $self;
 }
 
-sub create_resource() {
+sub create_resource($) {
+	my ($self) = @_;
+	++$self->{Used};
 	return ResourcePool::Resource->new();
 }
 
 sub info($) {
 	my ($self) = @_;
 	return $self;	
+}
+
+sub _my_very_private_and_secret_test_hook($) {
+	my ($self) = @_;
+	return $self->{Used};
 }
 
 1;
@@ -89,8 +96,10 @@ purposes.
 
 =head1 SEE ALSO
 
-ResourcePool(3pm), ResourcePool::Resource(3pm), ResourcePool::Factory::DBI(3pm),
-ResourcePool::Factory::Net::LDAP(3pm)
+L<ResourcePool(3pm)>, 
+L<ResourcePool::Resource(3pm)>, 
+L<ResourcePool::Factory::DBI(3pm)>,
+L<ResourcePool::Factory::Net::LDAP(3pm)>
 
 =head1 AUTHOR
 

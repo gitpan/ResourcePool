@@ -1,5 +1,12 @@
 Changelog for ResourcePool
 
+V0.9906 - 2002-07-10
+
+    * wrapped DBI calls into eval{} blocks to make RaiseError aware.
+    * It's possible to pass the options for ResourcePool and LoadBalancer
+      using a Hash reference.
+    * added tests
+
 V0.9905 - 2002-07-05
 
     * A rollback() is performed on DBI sessions with AutoCommit disabled

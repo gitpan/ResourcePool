@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LoadBalancer.pm,v 1.16 2002/07/05 15:14:03 mws Exp $
+#*** $Id: LoadBalancer.pm,v 1.19 2002/07/10 17:27:44 mws Exp $
 #*********************************************************************
 
 ######
@@ -17,7 +17,7 @@ use vars qw($VERSION @ISA);
 use ResourcePool::Singleton;
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9905";
+$VERSION = "0.9906";
 
 sub new($$@) {
 	my $proto = shift;
@@ -38,9 +38,15 @@ sub new($$@) {
 			Policy => "LeastUsage",
 			MaxTry => 6,
 			# RoundRobin, LeastUsage, FallBack
-			SleepOnFail => [0,1,2,4,8],
-			@_,	
+			SleepOnFail => [0,1,2,4,8]
 		);
+
+		if (scalar(@_) == 1) {
+			%options = ((%options), %{$_[0]});
+		} elsif (scalar(@_) > 1) {
+			%options = ((%options), @_);
+		}
+
 		$options{Policy} = uc($options{Policy});
 		if ($options{Policy} ne "LEASTUSAGE" && 
 			$options{Policy} ne "ROUNDROBIN" &&
@@ -402,7 +408,7 @@ ResourcePool::LoadBalancer - A LoadBalancer across ResourcePools
 =head1 DESCRIPTION
 
 The LoadBalancer is a generic way to spread requests to different ResourcePools
-to increase performance and/or availibility.
+to increase performance and/or availability.
 
 Beside the construction the interface of a LoadBalancer is the same as the 
 interface of a ResourcePool. This makes it very simple to change a program 
@@ -625,7 +631,7 @@ In the example above the sleeps sum up to 60 seconds.
 
 =head1 SEEL ALSO
 
-ResourcePool(3pm)
+L<ResourcePool(3pm)>
 
 =head1 AUTHOR
 
