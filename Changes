@@ -1,5 +1,13 @@
 Changelog for ResourcePool
 
+V1.0100 - 2003-02-27
+
+  *  This release introduces a new way to use ResourcePool and 
+     LoadBalancer. It implements the Command design pattern as 
+     described in the GOF Design Patterns book. This release is a 
+     preview, the features are not yet fully implemented and might 
+     therefore not sufficient for you needs right now. 
+
 V1.0000 - 2003-01-02
 
   *  From this release on, the ResourcePool package will not contain 

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** Makefile.PL
-#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Makefile.PL,v 1.14.2.2 2002/12/22 13:08:57 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: Makefile.PL,v 1.17 2003/01/10 23:08:13 mws Exp $
 #*********************************************************************
 
 use ExtUtils::MakeMaker qw(prompt WriteMakefile);
@@ -12,7 +12,7 @@ use Data::Dumper;
 my %opts;
 
 $opts{NAME}	= 'ResourcePool',
-$opts{VERSION} = '1.0000';
+$opts{VERSION} = '1.0100';
 
 if ($ExtUtils::MakeMaker::VERSION >= 5.43) {
     $opts{ABSTRACT} = 'A connection caching and pooling class.';

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory
-#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Factory.pm,v 1.24.2.1 2002/12/22 11:58:55 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: Factory.pm,v 1.28 2003/01/10 23:08:16 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory;
@@ -14,14 +14,14 @@ use Data::Dumper;
 use Storable;
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "1.0000";
+$VERSION = "1.0100";
 
 ####
 # Some notes about the singleton behavior of this class.
 # 1. the constructor does not return a singleton reference!
 # 2. there is a seperate function called singelton() which will return a
 #    singleton reference
-# this change was introduces with ResourcePool 1.0000 to allow more flexible
+# this change was introduces with ResourcePool 0.9909 to allow more flexible
 # factories (e.g. factories which do not require all parameters to their 
 # constructor) an example of such an factory is the Net::LDAP factory.
 
@@ -31,10 +31,8 @@ sub new($$) {
 	my $class = ref($proto) || $proto;
 	my $key = shift;
 	my $self = {};
-	$self->{key} = $key;
+	$self->{key} = $key; # this is required to make different plain Factories to be different ;)
 	$self->{VALID} = 1;
-
-	$self->{singleton}->{'_ResourcePool::Factory::key'} = $key;
 
 	bless($self, $class);
 
@@ -57,24 +55,21 @@ sub info($) {
 }
 
 sub singleton($) {
-        my ($self) = @_;
-        my $singleton = $self->SUPER::new($self->mk_singleton_key());
-                                                # parent uses Singleton
-        if (!$singleton->{initialized}) {
-                %{$singleton} = %{$self};
-                $singleton->{initialized} = 1;
-        }
-        return $singleton;
+	my ($self) = @_;
+	my $key = $self->mk_singleton_key();
+	my $singleton = $self->SUPER::new($key); # parent is Singleton
+	if (!$singleton->{initialized}) {
+		%{$singleton} = %{$self};
+		$singleton->{initialized} = 1;
+	}
+	return $singleton;
 }
 
 sub mk_singleton_key($) {
-#	my $self = shift @_;
-#        my ($self) = @_;
-
-        my $d = Data::Dumper->new([$_[0]]);
-        $d->Indent(0);
-        $d->Terse(1);
-        return $d->Dump();
+	my $d = Data::Dumper->new([$_[0]]);
+	$d->Indent(0);
+	$d->Terse(1);
+	return $d->Dump();
 }
 
 

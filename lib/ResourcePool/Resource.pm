@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource
-#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Resource.pm,v 1.23.2.1 2002/12/22 11:58:55 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: Resource.pm,v 1.27 2003/02/27 21:31:49 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource;
@@ -9,19 +9,19 @@ package ResourcePool::Resource;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "1.0000";
+$VERSION = "1.0100";
 
 sub new($@) {
-        my $proto = shift;
-        my $class = ref($proto) || $proto;
-        my $self = {};
+	my $proto = shift;
+	my $class = ref($proto) || $proto;
+	my $self = {};
 	$self->{PR} = $self;
 	$self->{ARGUMENT} = shift;
 	$self->{VALID} = 1;
 
-        bless($self, $class);
+	bless($self, $class);
 
-        return $self;
+	return $self;
 }
 
 sub close($) {

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer::FallBack
-#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: FallBack.pm,v 1.3.2.1 2002/12/22 11:58:55 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: FallBack.pm,v 1.6 2003/01/10 23:08:16 mws Exp $
 #*********************************************************************
 
 package ResourcePool::LoadBalancer::FallBack;
@@ -9,7 +9,7 @@ package ResourcePool::LoadBalancer::FallBack;
 use vars qw($VERSION @ISA);
 use ResourcePool::LoadBalancer;
 
-$VERSION = "1.0000";
+$VERSION = "1.0100";
 push @ISA, "ResourcePool::LoadBalancer";
 
 sub get_once($) {

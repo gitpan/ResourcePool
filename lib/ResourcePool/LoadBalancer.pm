@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer
-#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LoadBalancer.pm,v 1.27.2.1 2002/12/22 11:58:55 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: LoadBalancer.pm,v 1.32 2003/01/20 18:59:16 mws Exp $
 #*********************************************************************
 
 ######
@@ -15,9 +15,10 @@ package ResourcePool::LoadBalancer;
 use strict;
 use vars qw($VERSION @ISA);
 use ResourcePool::Singleton;
+use ResourcePool::Command::Execute;
 
-push @ISA, "ResourcePool::Singleton";
-$VERSION = "1.0000";
+push @ISA, ("ResourcePool::Command::Execute", "ResourcePool::Singleton");
+$VERSION = "1.0100";
 
 sub new($$@) {
 	my $proto = shift;
@@ -33,11 +34,12 @@ sub new($$@) {
 		$self->{PoolArraySize} = 0; # empty pool list
 		$self->{PoolHash} = (); # empty pool hash
 		$self->{UsedPool} = (); # mapping from plain_resource to
-					# rich pool
+		                        # rich pool
 		$self->{Next} = 0;
 		my %options = (
 			Policy => "LeastUsage",
 			MaxTry => 6,
+			MaxExecTry => 6,
 			# RoundRobin, LeastUsage, FallBack
 			SleepOnFail => [0,1,2,4,8]
 		);
@@ -68,11 +70,12 @@ sub new($$@) {
 		$#{@{$options{SleepOnFail}}} = $options{MaxTry} - 2;
 
 
-		$self->{Policy} = $options{Policy};
-		$self->{MaxTry} = $options{MaxTry};
-		$self->{StatSuspend} = 0;
+		$self->{Policy}         = $options{Policy};
+		$self->{MaxTry}         = $options{MaxTry} - 1;
+		$self->{MaxExecTry}     = $options{MaxExecTry} - 1;
+		$self->{StatSuspend}    = 0;
 		$self->{StatSuspendAll} = 0;
-		$self->{SleepOnFail} = [reverse @{$options{SleepOnFail}}];
+		$self->{SleepOnFail}    = [reverse @{$options{SleepOnFail}}];
 
 		if ($self->{Policy} eq "ROUNDROBIN") {
 			$class .= "::RoundRobin";
@@ -115,7 +118,7 @@ sub add_pool($$@) {
 sub get($) {
 	my ($self) = @_;
 	my $rec;
-	my $maxtry = $self->{MaxTry} - 1;
+	my $maxtry = $self->{MaxTry};
 	my $trylength;
 	my $r_pool;
 
@@ -124,7 +127,7 @@ sub get($) {
 		do {
 			($rec, $r_pool) = $self->get_once();
 		} while (! $rec && ($trylength-- > 0));
-	} while (! $rec && ($maxtry--) && ($self->sleepit($maxtry)));
+	} while (! $rec && ($maxtry-- > 0) && ($self->sleepit($maxtry)));
 
 	if ($rec) {
 		$self->{UsedPool}->{$rec} = $r_pool;
@@ -210,7 +213,10 @@ sub get_stat_free($) {
 
 sub suspend($$) {
 	my ($self, $r_pool) = @_;
-#	my $r_pool = $self->{PoolHash}->{$pool};
+	
+	if ($r_pool->{SuspendTimeout} <= 0) {
+		return;
+	}
 
 	if (! $self->chk_suspend_no_recover($r_pool)) {
 		swarn("LoadBalancer(%s): Suspending pool to '%s' for %s seconds\n",

@@ -5,7 +5,7 @@ ResourcePool::BigPicture - ResourcePool introduction
 =head1 DESCRIPTION
 
 
-The ResourcePool package consists of two major parts: 
+The ResourcePool package consists of three major parts: 
 
 =over 4
 
@@ -15,8 +15,11 @@ ResourcePool
 =item * 
 LoadBalancer 
 
+=item * 
+Command framework 
+
 =back
-The overview of this two parts will be described in this document.
+The overview of this three parts will be described in this document.
 
 =head1 ResourcePool
 
@@ -55,7 +58,7 @@ Please have a look to the L<ResourcePool documentation|ResourcePool> for further
 
 A L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> can be used to configure a failover and/or loadbalancing behavior for L<ResourcePool|ResourcePool> users.
 
-To construct a L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> you need one or more L<ResourcePools|ResourcePool>. After construction a L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> behaves like a L<ResourcePool|ResourcePool>, so you can call the L<get()|ResourcePool/get> method to obtain a resource.
+To construct a L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> you need one or more L<ResourcePools|ResourcePool>. After construction a L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> behaves like a L<ResourcePool|ResourcePool>, so you can call the L<get()|ResourcePool/get> method to obtain a resource and can use the L<Command|/Command framework> strategy.
 
 The L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> can be configured to use a different L<ResourcePool|ResourcePool> every time you call the L<get()|ResourcePool/get> method. The L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> can also detect a problem with a L<ResourcePool|ResourcePool> (e.g. because the related server is down) and will hide such problems from you.
 
@@ -74,10 +77,21 @@ FallBack
 
 =back
 
+=head1 Command framework
+
+
+The L<ResourcePool|ResourcePool> package includes a framework which can be used to execute commands like described in the GOF book "Design Patterns". You can use this pattern to avoid manual use of the L<get()|ResourcePool/get>, L<free()|ResourcePool/free> and L<fail()|ResourcePool/fail> methods. The common code used to work with L<ResourcePool|ResourcePool> or L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> (get resource, use it, return it to the pool) has been encapsulated into the L<execute()|ResourcePool/execute> method.
+
+The Command framework will it make easier to handle errors, and is capable of re-trying the complete work if an error occured. Using this pattern can help you to forget (nearly) about error handling since everything is handled in L<ResourcePool|ResourcePool> and L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer>. More details how to use this pattern can be found in the L<ResourcePool::Command::Execute|ResourcePool::Command::Execute> documentation.
+
+This pattern does also allow to use L<ResourcePool|ResourcePool> and L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> for a complete new type of resources like L<SOAP::Lite|SOAP::Lite>. In that case you can use L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> to spread load and handle failover for SOAP RPC calls. Have a look at L<ResourcePool::Command::SOAP::Lite::Call|ResourcePool::Command::SOAP::Lite::Call> for details about this approach.
+
 =head1 Learn More
 
 
 You should have the big picture of L<ResourcePool|ResourcePool> and L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> now, time to go into the details at the L<ResourcePool|ResourcePool> and L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> documentation. If you loose track of all these modules consult the L<ResourcePool::UML|ResourcePool::UML> diagram.
+
+The best entry point for the Command pattern is the L<ResourcePool::Command::Execute|ResourcePool::Command::Execute> documentation. Have a look at the L<ResourcePool::Command::DBI::Execute|ResourcePool::Command::DBI::Execute> documentation for a database related example or L<ResourcePool::Command::SOAP::Lite::Call|ResourcePool::Command::SOAP::Lite::Call> documentation for a SOAP RPC example.
 
 To learn more about how to implement your own resource extensions have a look to the L<ResourcePool::ExtensionGuide|ResourcePool::ExtensionGuide>.
 

@@ -9,7 +9,7 @@ ResourcePool - A connection caching and pooling class.
  use ResourcePool;
  use ResourcePool::Factory;
  
- my $factory = ResourcePool::Factory->new();
+ my $factory = ResourcePool::Factory->new("arg1");
  my $pool    = ResourcePool->new($factory, MaxTry => 3);
  
  my $resource = $pool->get();  # get a resource out of the pool
@@ -54,6 +54,12 @@ Default: 5
 =item B<MaxTry>
 
 Specifies how many dead resources the L<get()|/get> method checks before it returns undef. Normally the L<get()|/get> method doesn't return dead resources (e.g. broken connections). In the case there is a broken connection in the pool, the L<get()|/get> method throws it away and takes the next resource out of the pool. The L<get()|/get> method tries not more then MaxTry resources before it returns undef.
+
+Default: 2
+
+=item B<MaxExecTry>
+
+Specifies how often the L<execute()|/execute> method will repeat the command before it gives up. Please have a look at the L<ResourcePool::Command|ResourcePool::Command> documentation to learn more about the Command patten and how to use it with ResourcePool.
 
 Default: 2
 
@@ -142,6 +148,16 @@ Marks a resource as bad. The ResourcePool will throw this resource away and NOT 
 
 B<Returns:> true on success or false if the resource doesn't belong to that pool
 
+=head2 S<$pool-E<gt>execute($Command)>
+
+Executes a L<ResourcePool::Command|ResourcePool::Command> with a resource from this pool. The execute() method implements the Command design pattern from the GoF book "Design Patterns". This enables you to use the ResourcePool without using the get(), free() and fail() methods manually. Basically the execute() method obtains a resource from this pool by calling its get() method, then calling the execute() method of the supplied Command and releasing the resource afterwards.
+
+The execute method will call die() if an error happened, therefore it's best practice to wrap it in an eval{} block.
+
+The L<ResourcePool::Command::Execute|ResourcePool::Command::Execute> documentation covers this in all the details and facets which are introduced by this pattern.
+
+B<Returns:> 
+
 =head1 EXAMPLES
 
 
@@ -215,6 +231,8 @@ If you have a connection problem with the resource while using it, it's the best
 The resources you obtain from the L<get()|/get> method are in no way magic. They are just plain L<Net::LDAP|Net::LDAP> handles as you would create them yourself. You still MUST apply all the error handling when using this resource.
 
 =back
+
+Examples for the L<execute()|/execute> method can be found in the L<ResourcePool::Command|ResourcePool::Command> documentation.
 
 =head1 TIMEOUTS
 

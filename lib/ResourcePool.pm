@@ -1,13 +1,12 @@
 #*********************************************************************
 #*** ResourcePool
-#*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: ResourcePool.pm,v 1.43.2.1 2002/12/22 11:58:55 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: ResourcePool.pm,v 1.48 2003/01/20 18:59:12 mws Exp $
 #*********************************************************************
 
 ######
 # TODO
 #
-# -> sleep between Try's
 # -> statistics function
 # -> DEBUG option to find "lost" resources (store backtrace of get() call
 #    and dump on DESTROY)
@@ -18,14 +17,16 @@ package ResourcePool;
 use strict;
 use vars qw($VERSION @ISA);
 use ResourcePool::Singleton;
+use ResourcePool::Command::Execute;
+
 BEGIN { 
 	# make script using Time::HiRes, but not fail if it isn't there
 	eval "use Time::HiRes qw(sleep)";
 }
 
 
-push @ISA, "ResourcePool::Singleton";
-$VERSION = "1.0000";
+push @ISA, ("ResourcePool::Command::Execute", "ResourcePool::Singleton");
+$VERSION = "1.0100";
  
 sub new($$@) {
 	my $proto = shift;
@@ -43,6 +44,7 @@ sub new($$@) {
 			Max => 5,
 			Min => 1,
 			MaxTry => 2,
+			MaxExecTry => 2,
 			PreCreate => 0,
 			SleepOnFail => [0]
 		);
@@ -69,11 +71,12 @@ sub new($$@) {
 		# truncate list if it is too long
 		$#{@{$options{SleepOnFail}}} = $options{MaxTry} - 2;
 		
-		$self->{Max}			= $options{Max};
-		$self->{Min}			= $options{Min};
-		$self->{MaxTry}			= $options{MaxTry} - 1;
-		$self->{PreCreate}		= $options{PreCreate};
-		$self->{SleepOnFail}	= [reverse @{$options{SleepOnFail}}];
+		$self->{Max}         = $options{Max};
+		$self->{Min}         = $options{Min};
+		$self->{MaxTry}      = $options{MaxTry} - 1;
+		$self->{MaxExecTry}  = $options{MaxExecTry} - 1;
+		$self->{PreCreate}   = $options{PreCreate};
+		$self->{SleepOnFail} = [reverse @{$options{SleepOnFail}}];
 
 		bless($self, $class);
 		for (my $i = $self->{PreCreate}; $i > 0; $i--) {
@@ -110,7 +113,7 @@ sub get($) {
 				$self->{UsedPoolSize}++;
 			}
 		} 
-	} while (! $rec &&  ($maxtry--) && ($self->sleepit($maxtry)));
+	} while (! $rec &&  ($maxtry-- > 0) && ($self->sleepit($maxtry)));
 	return $rv;
 }
 

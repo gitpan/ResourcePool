@@ -2,7 +2,7 @@
 #*********************************************************************
 #*** t/03ResourcePoolSingleton.t
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 03ResourcePoolSingleton.t,v 1.6.2.2 2002/12/22 13:51:33 mws Exp $
+#*** $Id: 03ResourcePoolSingleton.t,v 1.7 2003/01/04 11:20:31 mws Exp $
 #*********************************************************************
 use strict;
 use Test;
