@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource::Net::LDAP
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.12 2002/07/10 17:27:44 mws Exp $
+#*** $Id: LDAP.pm,v 1.12.2.2 2002/08/30 16:38:45 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource::Net::LDAP;
@@ -13,13 +13,13 @@ use Net::LDAP::Constant qw(:all);
 use ResourcePool::Resource;
 use Data::Dumper;
 
-$VERSION = "0.9906";
+$VERSION = "0.9907";
 push @ISA, "ResourcePool::Resource";
 
 sub new($$$@) {
         my $proto = shift;
         my $class = ref($proto) || $proto;
-        my $self = {};
+        my $self = $class->SUPER::new();
 	$self->{Factory} = shift;
         my $host   = shift;
 	$self->{BindOptions} = defined $_[0] ? shift: [];

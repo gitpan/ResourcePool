@@ -1,5 +1,11 @@
 Changelog for ResourcePool
 
+V0.9907 - 2002-08-30
+
+    * Fixed a major bug in Net::LDAP bindings which was introduced in 
+      V0.9906. Every LDAP connection was believed to be broken when 
+      handed back via free().
+
 V0.9906 - 2002-07-10
 
     * wrapped DBI calls into eval{} blocks to make RaiseError aware.

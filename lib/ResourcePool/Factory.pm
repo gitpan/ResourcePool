@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Factory.pm,v 1.16 2002/07/10 17:27:44 mws Exp $
+#*** $Id: Factory.pm,v 1.16.2.1 2002/08/30 16:25:11 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory;
@@ -12,7 +12,7 @@ use ResourcePool::Singleton;
 use ResourcePool::Resource;
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9906";
+$VERSION = "0.9907";
 
 sub new($$) {
 	my $proto = shift;

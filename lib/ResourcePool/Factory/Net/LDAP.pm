@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory::Net::LDAP
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.14 2002/07/10 17:27:44 mws Exp $
+#*** $Id: LDAP.pm,v 1.14.2.1 2002/08/30 16:25:15 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory::Net::LDAP;
@@ -12,7 +12,7 @@ use ResourcePool::Resource::Net::LDAP;
 use Data::Dumper;
 
 push @ISA, "ResourcePool::Factory";
-$VERSION = "0.9906";
+$VERSION = "0.9907";
 
 sub new($$@) {
         my ($proto) = shift;

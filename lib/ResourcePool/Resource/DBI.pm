@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource::DBI
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: DBI.pm,v 1.15 2002/07/10 17:27:44 mws Exp $
+#*** $Id: DBI.pm,v 1.15.2.1 2002/08/30 16:25:16 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource::DBI;
@@ -11,7 +11,7 @@ use strict;
 use DBI;
 use ResourcePool::Resource;
 
-$VERSION = "0.9906";
+$VERSION = "0.9907";
 push @ISA, "ResourcePool::Resource";
 
 sub new($$$$$) {

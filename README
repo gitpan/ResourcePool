@@ -6,8 +6,9 @@ See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
 Recent Changes
 --------------
-    * wrapped DBI calls into eval{} blocks to make RaiseError aware.
-    * added tests
+    * Fixed a major bug in Net::LDAP bindings which was introduced in
+      V0.9906. Every LDAP connection was believed to be broken when
+      handed back via free().
 
 Installation
 ------------
