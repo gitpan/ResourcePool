@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: ResourcePool.pm,v 1.33 2002/09/02 10:22:57 mws Exp $
+#*** $Id: ResourcePool.pm,v 1.35 2002/10/06 13:43:07 mws Exp $
 #*********************************************************************
 
 ######
@@ -25,15 +25,16 @@ BEGIN {
 
 
 push @ISA, "ResourcePool::Singleton";
-$VERSION = "0.9908";
+$VERSION = "0.9909";
  
 sub new($$@) {
 	my $proto = shift;
 	my $class = ref($proto) || $proto;
-	my $factory = shift;
+	my $factory_notsingleton = shift;
+	my $factory = $factory_notsingleton->singleton();
 	my $self;
 	my $i;
-	$self = $class->SUPER::new("ResourcePool::".$factory); # Singleton
+	$self = $class->SUPER::new($factory); # Singleton
 
 	if (!exists($self->{Factory})) {
 		$self->{Factory} = $factory;

@@ -70,8 +70,8 @@ This UML Diagram uses DBI as an example Resource. Other Resources are handled in
 =head1 SEE ALSO
 
 L<ResourcePool|ResourcePool>,
-L<ResourcePool::Resource::DBI|Resource::DBI>,
-L<ResourcePool::Resource::Net::LDAP|Resource::LDAP>
+L<ResourcePool::Resource::DBI|ResourcePool::Resource::DBI>,
+L<ResourcePool::Resource::Net::LDAP|ResourcePool::Resource::Net::LDAP>
 
 =head1 AUTHOR
 

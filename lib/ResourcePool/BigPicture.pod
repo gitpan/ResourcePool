@@ -23,7 +23,7 @@ The overview of this two parts will be described in this document.
 
 The L<ResourcePool|ResourcePool> is used to manage a pool of persistent connections (or more generally "resources"). Every resource in a pool is exactly equivalent to the others since all of them are created through the same factory.
 
-If you want to make a pool of different resources (e.g. connections to different databases) you have to use the L<ResourcePool::LoadBalancer|LoadBalancer>.
+If you want to make a pool of different resources (e.g. connections to different databases) you have to use the L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer>.
 
 The L<ResourcePool|ResourcePool> uses two other classes to operate:
 
@@ -40,26 +40,26 @@ used as wrapper to implement a unique interface to all resources
 
 =back
 
-To create a L<ResourcePool|ResourcePool> you need a L<ResourcePool::Factory|Factory> which is able to create the L<ResourcePool::Resource's|Resource> you want to use. The L<ResourcePool|ResourcePool> will then use this factory to create L<ResourcePool::Resource|Resource> objects as required.
+To create a L<ResourcePool|ResourcePool> you need a L<ResourcePool::Factory|ResourcePool::Factory> which is able to create the L<ResourcePool::Resource's|ResourcePool::Resource> you want to use. The L<ResourcePool|ResourcePool> will then use this factory to create L<ResourcePool::Resource|ResourcePool::Resource> objects as required.
 
-The L<ResourcePool::Resource|Resource> itself creates the finally interesting objects like L<DBI|DBI> or L<Net::LDAP|Net::LDAP> and provides a standard way to perform the common operations required by L<ResourcePool|ResourcePool> to work with this resource.
+The L<ResourcePool::Resource|ResourcePool::Resource> itself creates the finally interesting objects like L<DBI|DBI> or L<Net::LDAP|Net::LDAP> and provides a standard way to perform the common operations required by L<ResourcePool|ResourcePool> to work with this resource.
 
-The L<ResourcePool::Factory|Factory> and L<ResourcePool::Resource|Resource> classes are base classes to inherit the specialized classes for your resource from. The classes to handle L<DBI|DBI> and L<Net::LDAP|Net::LDAP> resources are included in the distribution.
+The L<ResourcePool::Factory|ResourcePool::Factory> and L<ResourcePool::Resource|ResourcePool::Resource> classes are base classes to inherit the specialized classes for your resource from. The classes to handle L<DBI|DBI> and L<Net::LDAP|Net::LDAP> resources are included in the distribution.
 
-After creating a L<ResourcePool|ResourcePool> you can use the L<get()|ResourcePool> method to obtain a resource. The L<get()|ResourcePool> method will return the L<DBI|DBI> or L<Net::LDAP|Net::LDAP> object which can be used as usually. Afterwards you have to hand the resource back into the pool by calling the L<free()|ResourcePool> method.
+After creating a L<ResourcePool|ResourcePool> you can use the L<get()|ResourcePool/get> method to obtain a resource. The L<get()|ResourcePool/get> method will return the L<DBI|DBI> or L<Net::LDAP|Net::LDAP> object which can be used as usually. Afterwards you have to hand the resource back into the pool by calling the L<free()|ResourcePool/free> method.
 
 Please have a look to the L<ResourcePool documentation|ResourcePool> for further details.
 
 =head1 ResourcePool::LoadBalancer
 
 
-A L<ResourcePool::LoadBalancer|LoadBalancer> can be used to configure a failover and/or loadbalancing behavior for L<ResourcePool|ResourcePool> users.
+A L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> can be used to configure a failover and/or loadbalancing behavior for L<ResourcePool|ResourcePool> users.
 
-To construct a L<ResourcePool::LoadBalancer|LoadBalancer> you need one or more L<ResourcePools|ResourcePool>. After construction a L<ResourcePool::LoadBalancer|LoadBalancer> behaves like a L<ResourcePool|ResourcePool>, so you can call the L<get()|ResourcePool> method to obtain a resource.
+To construct a L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> you need one or more L<ResourcePools|ResourcePool>. After construction a L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> behaves like a L<ResourcePool|ResourcePool>, so you can call the L<get()|ResourcePool/get> method to obtain a resource.
 
-The L<ResourcePool::LoadBalancer|LoadBalancer> can be configured to use a different L<ResourcePool|ResourcePool> every time you call the L<get()|ResourcePool> method. The L<ResourcePool::LoadBalancer|LoadBalancer> can also detect a problem with a L<ResourcePool|ResourcePool> (e.g. because the related server is down) and will hide such problems from you.
+The L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> can be configured to use a different L<ResourcePool|ResourcePool> every time you call the L<get()|ResourcePool/get> method. The L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> can also detect a problem with a L<ResourcePool|ResourcePool> (e.g. because the related server is down) and will hide such problems from you.
 
-There are currently three "Policies" which change the way the L<ResourcePool::LoadBalancer|LoadBalancer> uses the configured resources: 
+There are currently three "Policies" which change the way the L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> uses the configured resources: 
 
 =over 4
 
@@ -77,14 +77,14 @@ FallBack
 =head1 Learn More
 
 
-You should have the big picture of L<ResourcePool|ResourcePool> and L<ResourcePool::LoadBalancer|LoadBalancer> now, time to go into the details at the L<ResourcePool|ResourcePool> and L<ResourcePool::LoadBalancer|LoadBalancer> documentation. If you loose track of all these modules consult the L<ResourcePool::UML|ResourcePool::UML> diagram.
+You should have the big picture of L<ResourcePool|ResourcePool> and L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> now, time to go into the details at the L<ResourcePool|ResourcePool> and L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> documentation. If you loose track of all these modules consult the L<ResourcePool::UML|ResourcePool::UML> diagram.
 
-To learn more about how to implement your own resource extensions have a look to the L<ResourcePool::ExtensionGuide|ExtensionGuide>.
+To learn more about how to implement your own resource extensions have a look to the L<ResourcePool::ExtensionGuide|ResourcePool::ExtensionGuide>.
 
 =head1 SEE ALSO
 
 L<ResourcePool|ResourcePool>,
-L<ResourcePool::LoadBalancer|LoadBalancer>,
+L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer>,
 L<ResourcePool::UML|ResourcePool::UML>
 
 =head1 AUTHOR

@@ -9,9 +9,11 @@ lib/ResourcePool/Singleton.pod
 lib/ResourcePool/LoadBalancer.pm
 lib/ResourcePool/LoadBalancer.pod
 lib/ResourcePool/Resource/Net/LDAP.pm
+lib/ResourcePool/Resource/Net/LDAP.pod
 lib/ResourcePool/Resource/DBI.pm
 lib/ResourcePool/Resource/DBI.pod
 lib/ResourcePool/Factory/Net/LDAP.pm
+lib/ResourcePool/Factory/Net/LDAP.pod
 lib/ResourcePool/Factory/DBI.pm
 lib/ResourcePool/Factory/DBI.pod
 lib/ResourcePool/Factory.pm

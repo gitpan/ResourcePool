@@ -1,5 +1,19 @@
 Changelog for ResourcePool
 
+V0.9909 - 2002-10-07
+
+  *  A refactoring of the Singleton behavior of ResourcePool::Factory 
+     makes it possible to implement nicer factories 
+
+  *  Adopted ResourcePool::Factory::Net::LDAP to have a more native 
+     interface. 
+
+  *  Fixed links within the POD documentation (was broken for some 
+     pod2html translators) 
+
+  *  Added documentation for Net::LDAP bindings which were lost in 
+     the previous release. 
+
 V0.9908 - 2002-09-30
 
   *  Added documentation: ResourcePool::BigPicture, ResourcePool::UML 

@@ -19,7 +19,7 @@ ResourcePool::Factory::DBI - A L<DBI|DBI> Factory for L<ResourcePool|ResourcePoo
 
 This class is a factory class for L<DBI|DBI> resources to be used with the ResourcePool.
 
-Please have a look at L<ResourcePool::Factory|Factory> documentation to learn about the purpose of such a factory.
+Please have a look at L<ResourcePool::Factory|ResourcePool::Factory> documentation to learn about the purpose of such a factory.
 
 =head2 S<ResourcePool::Factory::DBI-E<gt>new($data_source, $username, $auth, $%attr)>
 
@@ -49,7 +49,7 @@ L<DBI|DBI> attributes.
 
 L<DBI|DBI>,
 L<ResourcePool|ResourcePool>,
-L<ResourcePool::Factory|Factory>
+L<ResourcePool::Factory|ResourcePool::Factory>
 
 =head1 AUTHOR
 

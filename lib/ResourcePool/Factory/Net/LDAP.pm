@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory::Net::LDAP
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LDAP.pm,v 1.17 2002/09/28 10:30:28 mws Exp $
+#*** $Id: LDAP.pm,v 1.19 2002/10/06 13:43:21 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory::Net::LDAP;
@@ -12,7 +12,16 @@ use ResourcePool::Resource::Net::LDAP;
 use Data::Dumper;
 
 push @ISA, "ResourcePool::Factory";
-$VERSION = "0.9908";
+$VERSION = "0.9909";
+
+####
+# Some notes about the singleton behavior of this class.
+# 1. the constructor does not return a singleton reference!
+# 2. there is a seperate function called singelton() which will return a
+#    singleton reference
+# this change was introduces with ResourcePool 0.9909 to allow more flexible
+# factories (e.g. factories which do not require all parameters to their 
+# constructor) an example of such an factory is the Net::LDAP factory.
 
 sub new($@) {
         my ($proto) = shift;
@@ -26,7 +35,6 @@ sub new($@) {
 	if (! exists($self->{host})) {
         	$self->{host} = shift;
 		if (defined $_[0] && ref($_[0]) ne "ARRAY") {
-			# new syntax, not finished yet, probable in next release
 		        $self->{BindOptions} = [];
 			$self->{NewOptions} = [@_];
 		} else {
@@ -40,6 +48,29 @@ sub new($@) {
 
         return $self;
 }
+
+sub bind($@) {
+	my $self = shift;
+	$self->{BindOptions} = [@_];
+}
+
+#sub singleton($) {
+#	my ($self) = @_;	
+#	my $singleton = $self->SUPER::new($self->serialize()); 
+#						# parent uses Singleton
+#	if (!$singleton->{initialized}) {
+#		%{$singleton} = %{$self};
+#		$singleton->{initialized} = 1;
+#	}
+#	return $singleton;
+#}
+#
+#sub serialize($) {
+#	my ($self) = @_;	
+#	my $d = Data::Dumper->new($self);
+#	$d->Indent(0);
+#	return $d->Dump();
+#}
 
 sub create_resource($) {
 	my ($self) = @_;

@@ -17,9 +17,9 @@ ResourcePool::Resource::DBI - A L<ResourcePool|ResourcePool> wrapper for L<DBI|D
 =head1 DESCRIPTION
 
 
-This class is used by the L<ResourcePool|ResourcePool> internally to create L<DBI|DBI> connections. Its called by the corresponding L<ResourcePool::Factory::DBI|Factory::DBI> object which passes the parameters needed to establish the L<DBI|DBI> connection.
+This class is used by the L<ResourcePool|ResourcePool> internally to create L<DBI|DBI> connections. Its called by the corresponding L<ResourcePool::Factory::DBI|ResourcePool::Factory::DBI> object which passes the parameters needed to establish the L<DBI|DBI> connection.
 
-The only thing which has to been known by an application developer about this class is the implementation of the L<precheck()|> and L<postcheck()|> methods:
+The only thing which has to been known by an application developer about this class is the implementation of the L<precheck()|/precheck> and L<postcheck()|/postcheck> methods:
 
 =head2 S<$resource-E<gt>precheck>
 
@@ -37,8 +37,8 @@ B<Returns:> always true
 
 L<DBI|DBI>,
 L<ResourcePool|ResourcePool>,
-L<ResourcePool::Resource|Resource>,
-L<ResourcePool::Factory::DBI|Factory::DBI>
+L<ResourcePool::Resource|ResourcePool::Resource>,
+L<ResourcePool::Factory::DBI|ResourcePool::Factory::DBI>
 
 =head1 AUTHOR
 

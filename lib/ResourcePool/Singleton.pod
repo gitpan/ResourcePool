@@ -42,7 +42,7 @@ On further calls of this constructor the ResourcePool::Singleton class will just
 
 This is very useful if the construction of an object is very expansive but it is required to be constructed at different places in your program. A special application for this feature is a Apache/mod_perl environment.
 
-The ResourcePool::Singleton class can not check if the stored object references are still valid, therefore it might return references to objects which have already been destroyed. If you need a persistent object which gets recreated on failure you should consider to use the L<ResourcePool|ResourcePool> and/or the L<ResourcePool::LoadBalancer|LoadBalancer> modules.
+The ResourcePool::Singleton class can not check if the stored object references are still valid, therefore it might return references to objects which have already been destroyed. If you need a persistent object which gets recreated on failure you should consider to use the L<ResourcePool|ResourcePool> and/or the L<ResourcePool::LoadBalancer|ResourcePool::LoadBalancer> modules.
 
 =head2 S<ResourcePool::Singleton-E<gt>new($key)>
 

@@ -1,0 +1,69 @@
+=head1 NAME
+
+ResourcePool::Factory::Net::LDAP - A L<Net::LDAP|Net::LDAP> Factory for L<ResourcePool|ResourcePool>
+
+=head1 SYNOPSIS
+
+
+ 
+ use ResourcePool::Factory::Net::LDAP;
+ 
+ my $factory = ResourcePool::Factory::Net::LDAP->new($hostname,
+ 				[NewOptions]);
+
+=head1 DESCRIPTION
+
+
+This class is a factory class for L<Net::LDAP|Net::LDAP> resources to be used with the L<ResourcePool|ResourcePool>.
+
+Please have a look at the L<ResourcePool::Factory|ResourcePool::Factory> documentation to learn about the purpose of such a factory.
+
+=head2 S<ResourcePool::Factory::Net::LDAP-E<gt>new($hostname, @NewOptions)>
+
+The arguments for the new method are passed to the new method of L<Net::LDAP|Net::LDAP>.
+
+=over 4
+
+=item $hostname
+
+The LDAP server name.
+
+=item @NewOptions - Optional
+
+The additional options to be passed to the new method of L<Net::LDAP|Net::LDAP>.
+
+=back
+
+=head2 S<$factory-E<gt>bind(@BindOptions)>
+
+The arguments to be passed to the bind() method of L<Net::LDAP|Net::LDAP>.
+
+Please not that this module will always do a bind to the LDAP server, if you do not specify any bind arguments the bind will be anonymously. The bind() call is used to check the vitality of the LDAP connection, if it fails L<ResourcePool|ResourcePool> will throw it away..
+
+
+=head1 EXAMPLES
+
+
+ 
+ use ResourcePool;
+ use ResourcePool::Factory::Net::LDAP;
+ 
+ my $factory =  ResourcePool::Factory::Net::LDAP->new("ldaphost",
+ 		version => 2);
+ $factory->bind('cn=Manager,dc=fatalmind,dc=com',
+                    password => 'secret');
+
+=head1 SEE ALSO
+
+L<Net::LDAP|Net::LDAP>,
+L<ResourcePool|ResourcePool>,
+L<ResourcePool::Factory|ResourcePool::Factory>
+
+=head1 AUTHOR
+
+    Copyright (C) 2002 by Markus Winand <mws@fatalmind.com>
+
+    This program is free software; you can redistribute it and/or
+    modify it under the same terms as Perl itself.
+
+		

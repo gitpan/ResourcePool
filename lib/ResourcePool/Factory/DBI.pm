@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Factory::DBI
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: DBI.pm,v 1.18 2002/09/03 08:31:22 mws Exp $
+#*** $Id: DBI.pm,v 1.20 2002/10/06 13:43:21 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Factory::DBI;
@@ -12,16 +12,13 @@ use ResourcePool::Resource::DBI;
 use ResourcePool::Factory;
 use Data::Dumper;
 
-$VERSION = "0.9908";
+$VERSION = "0.9909";
 push @ISA, "ResourcePool::Factory";
 
 sub new($$$$$) {
         my $proto = shift;
         my $class = ref($proto) || $proto;
-	my $d = Data::Dumper->new([@_]);
-	$d->Indent(0);
-	my $key = $d->Dump();
-	my $self = $class->SUPER::new("DBI". $key); # parent uses Singleton
+	my $self = $class->SUPER::new("DBI"); 
 
 	if (! exists($self->{DS})) {
 	        $self->{DS} = shift;
