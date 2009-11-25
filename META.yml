@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               ResourcePool
-version:            1.0105
+version:            1.0106
 abstract:           A connection caching and pooling class.
 author:
     - Markus Winand <mws@fatalmind.com>

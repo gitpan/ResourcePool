@@ -1,14 +1,14 @@
 #*********************************************************************
 #*** ResourcePool::Command::NoFailoverException
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: NoFailoverException.pm,v 1.4 2003-03-16 16:58:32 mws Exp $
+#*** $Id: NoFailoverException.pm,v 1.6 2009-11-25 14:40:22 mws Exp $
 #*********************************************************************
 package ResourcePool::Command::NoFailoverException;
 
 use strict;
 use vars qw($VERSION);
 use ResourcePool::Command::Exception;
-$VERSION = "1.0102";
+$VERSION = "1.0106";
 
 sub new($;$) {
 	my $proto = shift;

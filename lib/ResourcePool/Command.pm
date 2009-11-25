@@ -1,13 +1,13 @@
 #*********************************************************************
 #*** ResourcePool::Command
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Command.pm,v 1.10 2003-03-16 16:58:31 mws Exp $
+#*** $Id: Command.pm,v 1.12 2009-11-25 14:40:22 mws Exp $
 #*********************************************************************
 package ResourcePool::Command;
 
 use vars qw($VERSION);
 
-$VERSION = "1.0102";
+$VERSION = "1.0106";
 
 sub new($) {
 	my $proto = shift;

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::Resource
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Resource.pm,v 1.29 2003-03-16 16:58:31 mws Exp $
+#*** $Id: Resource.pm,v 1.31 2009-11-25 14:40:22 mws Exp $
 #*********************************************************************
 
 package ResourcePool::Resource;
@@ -9,7 +9,7 @@ package ResourcePool::Resource;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "1.0102";
+$VERSION = "1.0106";
 
 sub new($@) {
 	my $proto = shift;

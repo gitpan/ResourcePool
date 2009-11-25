@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer
 #*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
-#*** $Id: LoadBalancer.pm,v 1.36 2003-03-24 21:50:12 mws Exp $
+#*** $Id: LoadBalancer.pm,v 1.38 2009-11-25 14:40:22 mws Exp $
 #*********************************************************************
 
 ######
@@ -18,7 +18,7 @@ use ResourcePool::Singleton;
 use ResourcePool::Command::Execute;
 
 push @ISA, ("ResourcePool::Command::Execute", "ResourcePool::Singleton");
-$VERSION = "1.0102";
+$VERSION = "1.0106";
 
 sub new($$@) {
 	my $proto = shift;
