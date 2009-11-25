@@ -1,5 +1,10 @@
 Changelog for ResourcePool
 
+V1.0105 - 2009-11-25
+
+  *   Made the timeout in the tests less restritive to avoid false 
+      failure in case the test is performad on a loaded machine (Bug #29200).
+
 V1.0104 - 2003-05-07
 
   *  ResourcePool did use a stringified object as key in a hash 

@@ -27,7 +27,7 @@ This method returns the exception which cause the execute to fail.
 
 =head1 AUTHOR
 
-    Copyright (C) 2001-2005 by Markus Winand <mws@fatalmind.com>
+    Copyright (C) 2001-2009 by Markus Winand <mws@fatalmind.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the same terms as Perl itself.

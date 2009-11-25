@@ -1,8 +1,8 @@
 #! /usr/bin/perl -w
 #*********************************************************************
 #*** t/20LBOptions.t
-#*** Copyright (c) 2002-2005 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 20LBOptions.t,v 1.1.4.2 2005/01/05 19:43:36 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: 20LBOptions.t,v 1.3 2009-11-25 11:00:10 mws Exp $
 #*********************************************************************
 use strict;
 
@@ -20,7 +20,7 @@ sub timeinframe($$) {
 	my ($low, $high);
 
 	if (exists $INC{"Time/HiRes.pm"}) {
-		($low, $high) = (($should - 0.2), ($should + 0.2));
+		($low, $high) = (($should - 0.2), ($should + 0.5));
 	} else {
 		($low, $high) = (($should - 1), ($should + 1));
 	}

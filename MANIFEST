@@ -34,6 +34,8 @@ t/03ResourcePoolSingleton.t
 t/04LBSingleton.t
 t/10PoolOptions.t
 t/11Resource.t
-t/12PoolExecute.t
 t/20LBOptions.t
 t/22LBExecute.t
+t/31CommandException.t
+t/35CommandExecute.t
+META.yml                                 Module meta-data (added by MakeMaker)

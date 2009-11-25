@@ -2,7 +2,7 @@
 #*********************************************************************
 #*** t/10PoolOptions.t
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 10PoolOptions.t,v 1.4 2002/10/12 17:14:15 mws Exp $
+#*** $Id: 10PoolOptions.t,v 1.5 2009-11-25 11:00:10 mws Exp $
 #*********************************************************************
 use strict;
 
@@ -19,7 +19,7 @@ sub timeinframe($$) {
 	my ($low, $high);
 
 	if (exists $INC{"Time/HiRes.pm"}) {
-		($low, $high) = (($should - 0.2), ($should + 0.2));
+		($low, $high) = (($should - 0.2), ($should + 0.5));
 	} else {
 		($low, $high) = (($should - 1), ($should + 1));
 	}

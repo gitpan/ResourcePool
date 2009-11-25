@@ -1,14 +1,14 @@
 #*********************************************************************
 #*** ResourcePool::Command::Exception
-#*** Copyright (c) 2002-2005 by Markus Winand <mws@fatalmind.com>
-#*** $Id: Exception.pm,v 1.2.2.3 2005/01/05 19:43:35 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: Exception.pm,v 1.4 2003-03-16 16:58:32 mws Exp $
 #*********************************************************************
 package ResourcePool::Command::Exception;
 
 use vars qw($VERSION);
 #use overload ('""' => 'stringify');
 
-$VERSION = "1.0104";
+$VERSION = "1.0102";
 
 sub new($$$$) {
 	my $proto = shift;
@@ -57,11 +57,11 @@ sub getException($) {
 
 sub rootException($) {
 	my ($self) = @_;
-	my $rv = $self->{exception};
+	my $rv;
 	eval {
-		$rv = $rv->rootException();
+		$rv = $self->{exception}->rootException();
 	};
-	if ($rv) {
+	if (!$@) {
 		return $rv;
 	} else {
 		return $self->{exception};

@@ -1,7 +1,7 @@
 #*********************************************************************
 #*** ResourcePool::LoadBalancer::FailOver
-#*** Copyright (c) 2002-2005 by Markus Winand <mws@fatalmind.com>
-#*** $Id: FailOver.pm,v 1.1.2.3 2005/01/05 19:43:36 mws Exp $
+#*** Copyright (c) 2002,2003 by Markus Winand <mws@fatalmind.com>
+#*** $Id: FailOver.pm,v 1.1 2003-03-24 21:50:13 mws Exp $
 #*********************************************************************
 
 package ResourcePool::LoadBalancer::FailOver;
@@ -9,7 +9,7 @@ package ResourcePool::LoadBalancer::FailOver;
 use vars qw($VERSION @ISA);
 use ResourcePool::LoadBalancer;
 
-$VERSION = "1.0104";
+$VERSION = "1.0102";
 push @ISA, "ResourcePool::LoadBalancer";
 
 sub get_once($) {

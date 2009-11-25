@@ -2,7 +2,7 @@
 #*********************************************************************
 #*** t/04LBSingleton.t
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 04LBSingleton.t,v 1.1 2002/07/08 20:30:28 mws Exp $
+#*** $Id: 04LBSingleton.t,v 1.1 2002-07-08 20:30:28 mws Exp $
 #*********************************************************************
 use strict;
 use Test;
