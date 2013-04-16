@@ -2,7 +2,7 @@
 #*********************************************************************
 #*** t/02FactorySingleton.t
 #*** Copyright (c) 2002 by Markus Winand <mws@fatalmind.com>
-#*** $Id: 02FactorySingleton.t,v 1.10 2003-01-04 11:20:31 mws Exp $
+#*** $Id: 02FactorySingleton.t,v 1.11 2013-04-16 10:14:44 mws Exp $
 #*********************************************************************
 use strict;
 use Test;

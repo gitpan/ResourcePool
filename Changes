@@ -1,5 +1,8 @@
 Changelog for ResourcePool
 
+V1.0107 - 2013-04-16
+  *   Made it Hash-Randomization proof. (Bug #84265)
+
 V1.0105 - 2009-11-25
 
   *   Made the timeout in the tests less restritive to avoid false 

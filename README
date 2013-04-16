@@ -1,6 +1,6 @@
 ResourcePool - A connection caching and pooling framework
 
-Copyright (c) 2001-2009 by Markus Winand <mws@fatalmind.com>
+Copyright (c) 2001-2013 by Markus Winand <markus@winand.at>
 
 See COPYRIGHT section in the ResourcePool(3pm) manpage.
 
